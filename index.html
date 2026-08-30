@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon.ico">
+  <link rel="apple-touch-icon" sizes="512x512" href="./assets/vlc512x512.png">
+  <meta name="theme-color" content="#000000">
+  <title>VLC &ndash; Media Player</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+    <symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/>
+    </symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="14" y="3" width="5" height="18" rx="1"/>
+      <rect x="5" y="3" width="5" height="18" rx="1"/>
+    </symbol>
+    <symbol id="i-square" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect width="18" height="18" x="3" y="3" rx="2"/>
+    </symbol>
+    <symbol id="i-skip-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17.971 4.285A2 2 0 0 1 21 6v12a2 2 0 0 1-3.029 1.715l-9.997-5.998a2 2 0 0 1-.003-3.432z"/>
+      <path d="M3 20V4"/>
+    </symbol>
+    <symbol id="i-skip-forward" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 4v16"/>
+      <path d="M6.029 4.285A2 2 0 0 0 3 6v12a2 2 0 0 0 3.029 1.715l9.997-5.998a2 2 0 0 0 .003-3.432z"/>
+    </symbol>
+    <symbol id="i-rotate-ccw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+      <path d="M3 3v5h5"/>
+    </symbol>
+    <symbol id="i-rotate-cw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+      <path d="M21 3v5h-5"/>
+    </symbol>
+    <symbol id="i-volume-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/>
+      <path d="M16 9a5 5 0 0 1 0 6"/>
+      <path d="M19.364 18.364a9 9 0 0 0 0-12.728"/>
+    </symbol>
+    <symbol id="i-volume-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/>
+      <line x1="22" x2="16" y1="9" y2="15"/>
+      <line x1="16" x2="22" y1="9" y2="15"/>
+    </symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m18 14 4 4-4 4"/>
+      <path d="m18 2 4 4-4 4"/>
+      <path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"/>
+      <path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"/>
+      <path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"/>
+    </symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m17 2 4 4-4 4"/>
+      <path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
+      <path d="m7 22-4-4 4-4"/>
+      <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+    </symbol>
+    <symbol id="i-maximize" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+      <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
+      <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+      <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+    </symbol>
+    <symbol id="i-minimize" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3v3a2 2 0 0 1-2 2H3"/>
+      <path d="M21 8h-3a2 2 0 0 1-2-2V3"/>
+      <path d="M3 16h3a2 2 0 0 1 2 2v3"/>
+      <path d="M16 21v-3a2 2 0 0 1 2-2h3"/>
+    </symbol>
+    <symbol id="i-folder-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>
+    </symbol>
+    <symbol id="i-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 11v6"/>
+      <path d="M14 11v6"/>
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+      <path d="M3 6h18"/>
+      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    </symbol>
+  </svg>
+
+  <div id="app">
+    <header>
+      <div class="logo">
+        <span class="icon"><img src="./assets/vlc512x512.png" alt="VLC"></span>
+        <span>VLC&nbsp;WEB</span>
+      </div>
+      <div class="actions">
+        <button id="openBtn" class="primary">
+          <svg class="ico"><use href="#i-folder-open"/></svg>Open files
+        </button>
+        <button id="fullscreenBtn">
+          <svg class="ico ico-max"><use href="#i-maximize"/></svg>
+          <svg class="ico ico-min"><use href="#i-minimize"/></svg>Fullscreen
+        </button>
+        <input type="file" id="fileInput" multiple hidden>
+      </div>
+    </header>
+
+    <main>
+      <section class="stage">
+        <div id="dropzone">
+          <div class="placeholder">
+            <div class="big">VLC / WEB</div>
+            Drag and drop files here, or click "Open files"<br>
+            Supports video &middot; audio &middot; images &middot; text &middot; subtitles &middot; playlists
+          </div>
+          <video id="video" playsinline controlslist="nodownload nofullscreen"></video>
+          <img id="imageView" alt="">
+          <pre id="textView"></pre>
+        </div>
+        <div id="controls">
+          <div id="nowPlaying">No file loaded</div>
+          <div class="seekRow">
+            <span class="time" id="currentTime">00:00</span>
+            <input type="range" id="seekbar" min="0" max="100" value="0" step="0.1">
+            <span class="time" id="totalTime">00:00</span>
+          </div>
+          <div class="buttons">
+            <button id="prevBtn" title="Previous">
+              <svg class="ico"><use href="#i-skip-back"/></svg>
+            </button>
+            <button id="rewindBtn" title="Rewind 10s">
+              <svg class="ico"><use href="#i-rotate-ccw"/></svg>
+            </button>
+            <button id="playBtn" title="Play / Pause" class="active">
+              <svg class="ico ico-play"><use href="#i-play"/></svg>
+              <svg class="ico ico-pause"><use href="#i-pause"/></svg>
+            </button>
+            <button id="stopBtn" title="Stop">
+              <svg class="ico"><use href="#i-square"/></svg>
+            </button>
+            <button id="forwardBtn" title="Forward 10s">
+              <svg class="ico"><use href="#i-rotate-cw"/></svg>
+            </button>
+            <button id="nextBtn" title="Next">
+              <svg class="ico"><use href="#i-skip-forward"/></svg>
+            </button>
+            <span class="spacer"></span>
+            <button id="volumeBtn" title="Mute">
+              <svg class="ico ico-vol-on"><use href="#i-volume-2"/></svg>
+              <svg class="ico ico-vol-off"><use href="#i-volume-x"/></svg>
+            </button>
+            <input type="range" id="volumeBar" min="0" max="100" value="100" title="Volume">
+            <button id="shuffleBtn" title="Shuffle">
+              <svg class="ico"><use href="#i-shuffle"/></svg>
+            </button>
+            <button id="loopBtn" title="Loop">
+              <svg class="ico"><use href="#i-repeat"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <aside>
+        <header>
+          <span>Playlist <b id="count">0</b></span>
+          <button id="clearAll">
+            <svg class="ico"><use href="#i-trash-2"/></svg>Clear
+          </button>
+        </header>
+        <ul id="playlist"></ul>
+      </aside>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
