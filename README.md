@@ -29,7 +29,7 @@
 
 ## How to use
 
-### ▶ Online (GitHub Pages)
+###  Online (GitHub Pages)
 
 Open **https://jabar-reda.github.io/vlc-web/** in any browser. That's it — works over HTTPS from anywhere.
 
@@ -49,7 +49,7 @@ Double-click `index.html` (or open it in any browser via `file://`). No dependen
 |  Drag & drop | Drop any number of files anywhere on the page |
 |  Playlist | Click any item to play, auto-advance, clear with one button |
 |  Shuffle /  Loop | Randomized or repeated playback |
-| ⏯ Transport | Play / pause, stop, previous / next, ±10s seeking |
+|  Transport | Play / pause, stop, previous / next, ±10s seeking |
 |  Volume | Volume slider with mute toggle |
 |  Fullscreen | One-click fullscreen with an auto-updating icon |
 
