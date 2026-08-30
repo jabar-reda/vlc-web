@@ -1,34 +1,31 @@
 # VLC Web
 
 <p align="center">
-  <img src="https://jabar-reda.github.io/vlc-web/assets/vlc512x512.png" alt="VLC" width="128">
+  <a href="https://jabar-reda.github.io/vlc-web/">
+    <img src="assets/vlc512x512.png" alt="VLC Web" width="128">
+  </a>
+</p>
+
+<p align="center">A minimalist, black-and-white web media player inspired by VLC.</p>
+
+<p align="center">
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square"></a>
+  <a href="https://jabar-reda.github.io/vlc-web/"><img alt="Live demo" src="https://img.shields.io/website?url=https%3A%2F%2Fjabar-reda.github.io%2Fvlc-web%2F&label=live%20demo&style=flat-square"></a>
+  <a href="app.js"><img alt="JS: vanilla" src="https://img.shields.io/badge/JS-vanilla%20zero%20deps-yellow?style=flat-square"></a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
-  <img src="https://img.shields.io/website?url=https%3A%2F%2Fjabar-reda.github.io%2Fvlc-web%2F&label=live%20demo" alt="Live demo">
-  <img src="https://img.shields.io/badge/JS-vanilla%20zero%20deps-yellow.svg" alt="JS: vanilla, zero dependencies">
+  <a href="README.md">English</a> |
+  <a href="README.ar.md">العربية</a> |
+  <a href="README.fr.md">Français</a> |
+  <a href="README.es.md">Español</a> |
+  <a href="README.de.md">Deutsch</a> |
+  <a href="README.zh.md">中文</a>
 </p>
 
-A minimalist, black-and-white **web media player** inspired by VLC. It plays video, audio, images, text files, subtitles and playlists entirely in the browser — no installation, no server, no build tools.
+[![VLC Web screenshot](assets/screenshot.png)](https://jabar-reda.github.io/vlc-web/)
 
-## Screenshot
-
-![VLC Web screenshot](assets/screenshot.png)
-
-## Table of contents
-
-- [How to use](#how-to-use)
-  - [Online (GitHub Pages)](#online-github-pages)
-  - [Local (file://)](#local-file)
-- [Features](#features)
-- [Keyboard shortcuts](#keyboard-shortcuts)
-- [Supported formats](#supported-formats)
-- [Design](#design)
-- [Architecture](#architecture)
-- [Project structure](#project-structure)
-- [Browser support](#browser-support)
-- [License](#license)
+---
 
 ## How to use
 
