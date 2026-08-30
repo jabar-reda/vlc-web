@@ -96,7 +96,7 @@ this repository.
 
 | Step | Action | Description |
 | --- | --- | --- |
-| 1. Report | Contact maintainers | Message the maintainers privately (e.g., open a private/contact channel, or email `maintainers@example.com`) describing the incident |
+| 1. Report | Contact maintainers | Message the maintainers privately (e.g., open a private/contact channel, or email `jabarreda82@gmail.com`) describing the incident |
 | 2. Acknowledge | Review | Maintainers acknowledge receipt and review the report promptly and fairly, privately |
 | 3. Investigate | Decide | Maintainers investigate the report and determine appropriate corrective action, in line with the escalation path below |
 | 4. Resolve | Act | Private resolution, and public action only when appropriate (e.g., the community needs to know) |

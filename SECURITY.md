@@ -30,7 +30,7 @@ review. Please report privately instead.
 
 Contact the maintainers directly via a private channel:
 
-- **Email:** `maintainers@example.com`
+- **Email:** `jabarreda82@gmail.com`
 - **Private message:** to a maintainer on GitHub (if you have an existing
   relationship)
 
