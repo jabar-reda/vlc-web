@@ -1,4 +1,4 @@
-# VLC Web
+﻿# VLC Web
 
 <p align="center">
   <a href="https://jabar-reda.github.io/vlc-web/">
@@ -29,11 +29,11 @@
 
 ## Verwendung
 
-### ▶️ Online (GitHub Pages)
+### ▶ Online (GitHub Pages)
 
 Öffne **https://jabar-reda.github.io/vlc-web/** in jedem Browser. Das war's — funktioniert über HTTPS von überall.
 
-### 🏠 Lokal (file://)
+###  Lokal (file://)
 
 Doppelklick auf `index.html` (oder öffne es in einem beliebigen Browser über `file://`). Keine Abhängigkeiten, kein `npm install`, kein Build-Schritt.
 
@@ -41,25 +41,25 @@ Doppelklick auf `index.html` (oder öffne es in einem beliebigen Browser über `
 
 | Funktion | Beschreibung |
 | --- | --- |
-| 🎬 Video / 🎵 Audio | HTML5-Wiedergabe gängiger Webformate (MP4, WebM, MP3, WAV, OGG, …) |
-| 🖼️ Bilder | Anzeige von PNG, JPG, GIF, WebP, SVG und mehr |
-| 📄 Text & Untertitel | Anzeige von TXT, MD, SRT, VTT, ASS, CSV, JSON, Logs… |
-| 📃 Wiedergabelisten | Öffnen von `.m3u` / `.m3u8` / `.pls`-Dateien (lokal und remote URLs) |
-| 🔗 Remote-Streams | HTTP(S)-Links per Drag & Drop oder Eingabe laden und direkt streamen |
-| 🧲 Drag & Drop | Beliebig viele Dateien auf die Seite ziehen |
-| 📝 Wiedergabeliste | Einzelne Titel per Klick abspielen, automatischer Weiterlauf, Liste mit einem Klick leeren |
-| 🔀 Zufällig / 🔁 Schleife | Zufällige oder wiederholte Wiedergabe |
-| ⏯️ Steuerung | Abspielen / Pause, Stopp, Vorheriger / Nächster, ±10s Springen |
-| 🔊 Lautstärke | Lautstärkeregel mit Stummschalt-Taste |
-| ⛶ Vollbild | Ein-Klick-Vollbild mit automatisch aktualisierendem Symbol |
+|  Video /  Audio | HTML5-Wiedergabe gängiger Webformate (MP4, WebM, MP3, WAV, OGG, …) |
+|  Bilder | Anzeige von PNG, JPG, GIF, WebP, SVG und mehr |
+|  Text & Untertitel | Anzeige von TXT, MD, SRT, VTT, ASS, CSV, JSON, Logs… |
+|  Wiedergabelisten | Öffnen von `.m3u` / `.m3u8` / `.pls`-Dateien (lokal und remote URLs) |
+|  Remote-Streams | HTTP(S)-Links per Drag & Drop oder Eingabe laden und direkt streamen |
+|  Drag & Drop | Beliebig viele Dateien auf die Seite ziehen |
+|  Wiedergabeliste | Einzelne Titel per Klick abspielen, automatischer Weiterlauf, Liste mit einem Klick leeren |
+|  Zufällig /  Schleife | Zufällige oder wiederholte Wiedergabe |
+| ⏯ Steuerung | Abspielen / Pause, Stopp, Vorheriger / Nächster, ±10s Springen |
+|  Lautstärke | Lautstärkeregel mit Stummschalt-Taste |
+|  Vollbild | Ein-Klick-Vollbild mit automatisch aktualisierendem Symbol |
 
 ## Tastenkürzel
 
 | Taste | Aktion |
 | --- | --- |
 | `Space` | Abspielen / Pause |
-| `←` / `→` | 10s zurück / vorwärts |
-| `↑` / `↓` | Lautstärke hoch / runter |
+| `` / `` | 10s zurück / vorwärts |
+| `` / `` | Lautstärke hoch / runter |
 | `N` / `P` | Nächster / Vorheriger |
 | `M` | Stummschalten / Ton an |
 | `F` | Vollbild umschalten |

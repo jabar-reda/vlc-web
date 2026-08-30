@@ -1,4 +1,4 @@
-# VLC Web
+﻿# VLC Web
 
 <p align="center">
   <a href="https://jabar-reda.github.io/vlc-web/">
@@ -29,11 +29,11 @@
 
 ## How to use
 
-### ▶️ Online (GitHub Pages)
+### ▶ Online (GitHub Pages)
 
 Open **https://jabar-reda.github.io/vlc-web/** in any browser. That's it — works over HTTPS from anywhere.
 
-### 🏠 Local (file://)
+###  Local (file://)
 
 Double-click `index.html` (or open it in any browser via `file://`). No dependencies, no `npm install`, no build step.
 
@@ -41,25 +41,25 @@ Double-click `index.html` (or open it in any browser via `file://`). No dependen
 
 | Feature | Description |
 | --- | --- |
-| 🎬 Video / 🎵 Audio | HTML5 playback of common web formats (MP4, WebM, MP3, WAV, OGG, …) |
-| 🖼️ Images | View PNG, JPG, GIF, WebP, SVG and more |
-| 📄 Text & subtitles | Read TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
-| 📃 Playlists | Open `.m3u` / `.m3u8` / `.pls` files (local and remote URLs) |
-| 🔗 Remote streams | Drop or load an HTTP(S) link and stream it directly |
-| 🧲 Drag & drop | Drop any number of files anywhere on the page |
-| 📝 Playlist | Click any item to play, auto-advance, clear with one button |
-| 🔀 Shuffle / 🔁 Loop | Randomized or repeated playback |
-| ⏯️ Transport | Play / pause, stop, previous / next, ±10s seeking |
-| 🔊 Volume | Volume slider with mute toggle |
-| ⛶ Fullscreen | One-click fullscreen with an auto-updating icon |
+|  Video /  Audio | HTML5 playback of common web formats (MP4, WebM, MP3, WAV, OGG, …) |
+|  Images | View PNG, JPG, GIF, WebP, SVG and more |
+|  Text & subtitles | Read TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
+|  Playlists | Open `.m3u` / `.m3u8` / `.pls` files (local and remote URLs) |
+|  Remote streams | Drop or load an HTTP(S) link and stream it directly |
+|  Drag & drop | Drop any number of files anywhere on the page |
+|  Playlist | Click any item to play, auto-advance, clear with one button |
+|  Shuffle /  Loop | Randomized or repeated playback |
+| ⏯ Transport | Play / pause, stop, previous / next, ±10s seeking |
+|  Volume | Volume slider with mute toggle |
+|  Fullscreen | One-click fullscreen with an auto-updating icon |
 
 ## Keyboard shortcuts
 
 | Key | Action |
 | --- | --- |
 | `Space` | Play / pause |
-| `←` / `→` | Rewind / forward 10s |
-| `↑` / `↓` | Volume up / down |
+| `` / `` | Rewind / forward 10s |
+| `` / `` | Volume up / down |
 | `N` / `P` | Next / previous |
 | `M` | Mute / unmute |
 | `F` | Toggle fullscreen |

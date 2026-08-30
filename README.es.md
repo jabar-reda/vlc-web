@@ -1,4 +1,4 @@
-# VLC Web
+﻿# VLC Web
 
 <p align="center">
   <a href="https://jabar-reda.github.io/vlc-web/">
@@ -29,11 +29,11 @@
 
 ## Cómo usarlo
 
-### ▶️ En línea (GitHub Pages)
+### ▶ En línea (GitHub Pages)
 
 Abre **https://jabar-reda.github.io/vlc-web/** en cualquier navegador. Así de simple: funciona por HTTPS desde cualquier lugar.
 
-### 🏠 Local (`file://`)
+###  Local (`file://`)
 
 Haz doble clic en `index.html` (o ábrelo en cualquier navegador mediante `file://`). Sin dependencias, sin `npm install`, sin paso de compilación.
 
@@ -41,25 +41,25 @@ Haz doble clic en `index.html` (o ábrelo en cualquier navegador mediante `file:
 
 | Función | Descripción |
 | --- | --- |
-| 🎬 Vídeo / 🎵 Audio | Reproducción HTML5 de formatos web habituales (MP4, WebM, MP3, WAV, OGG, …) |
-| 🖼️ Imágenes | Ver PNG, JPG, GIF, WebP, SVG y más |
-| 📄 Texto y subtítulos | Leer TXT, MD, SRT, VTT, ASS, CSV, JSON, registros… |
-| 📃 Listas de reproducción | Abrir archivos `.m3u` / `.m3u8` / `.pls` (URLs locales y remotas) |
-| 🔗 Transmisiones remotas | Suelta o carga un enlace HTTP(S) y reprodúcelo directamente |
-| 🧲 Arrastrar y soltar | Suelta cualquier cantidad de archivos en cualquier parte de la página |
-| 📝 Lista de reproducción | Haz clic en cualquier elemento para reproducirlo, avance automático, borrar con un botón |
-| 🔀 Aleatorio / 🔁 Bucle | Reproducción aleatoria o repetida |
-| ⏯️ Transporte | Reproducir / pausar, detener, anterior / siguiente, ±10 s de avance |
-| 🔊 Volumen | Control deslizante de volumen con conmutador de silencio |
-| ⛶ Pantalla completa | Pantalla completa con un clic e icono que se actualiza automáticamente |
+|  Vídeo /  Audio | Reproducción HTML5 de formatos web habituales (MP4, WebM, MP3, WAV, OGG, …) |
+|  Imágenes | Ver PNG, JPG, GIF, WebP, SVG y más |
+|  Texto y subtítulos | Leer TXT, MD, SRT, VTT, ASS, CSV, JSON, registros… |
+|  Listas de reproducción | Abrir archivos `.m3u` / `.m3u8` / `.pls` (URLs locales y remotas) |
+|  Transmisiones remotas | Suelta o carga un enlace HTTP(S) y reprodúcelo directamente |
+|  Arrastrar y soltar | Suelta cualquier cantidad de archivos en cualquier parte de la página |
+|  Lista de reproducción | Haz clic en cualquier elemento para reproducirlo, avance automático, borrar con un botón |
+|  Aleatorio /  Bucle | Reproducción aleatoria o repetida |
+| ⏯ Transporte | Reproducir / pausar, detener, anterior / siguiente, ±10 s de avance |
+|  Volumen | Control deslizante de volumen con conmutador de silencio |
+|  Pantalla completa | Pantalla completa con un clic e icono que se actualiza automáticamente |
 
 ## Atajos de teclado
 
 | Tecla | Acción |
 | --- | --- |
 | `Space` | Reproducir / pausar |
-| `←` / `→` | Retroceder / avanzar 10 s |
-| `↑` / `↓` | Subir / bajar volumen |
+| `` / `` | Retroceder / avanzar 10 s |
+| `` / `` | Subir / bajar volumen |
 | `N` / `P` | Siguiente / anterior |
 | `M` | Silenciar / reactivar sonido |
 | `F` | Alternar pantalla completa |

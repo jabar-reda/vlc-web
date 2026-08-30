@@ -1,4 +1,4 @@
-# VLC Web
+﻿# VLC Web
 
 <p align="center">
   <a href="https://jabar-reda.github.io/vlc-web/">
@@ -29,11 +29,11 @@
 
 ## Utilisation
 
-### ▶️ En ligne (GitHub Pages)
+### ▶ En ligne (GitHub Pages)
 
 Ouvrez **https://jabar-reda.github.io/vlc-web/** dans n'importe quel navigateur. C'est tout — fonctionne via HTTPS depuis n'importe où.
 
-### 🏠 En local (file://)
+###  En local (file://)
 
 Double-cliquez sur `index.html` (ou ouvrez-le dans un navigateur via `file://`). Aucune dépendance, pas de `npm install`, pas de build.
 
@@ -41,25 +41,25 @@ Double-cliquez sur `index.html` (ou ouvrez-le dans un navigateur via `file://`).
 
 | Fonctionnalité | Description |
 | --- | --- |
-| 🎬 Vidéo / 🎵 Audio | Lecture HTML5 des formats web courants (MP4, WebM, MP3, WAV, OGG, …) |
-| 🖼️ Images | Affichage de PNG, JPG, GIF, WebP, SVG et plus |
-| 📄 Texte & sous-titres | Lecture de TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
-| 📃 Listes de lecture | Ouverture de fichiers `.m3u` / `.m3u8` / `.pls` (locaux et URLs distants) |
-| 🔗 Flux distants | Déposez ou chargez un lien HTTP(S) et diffusez-le directement |
-| 🧲 Glisser-déposer | Déposez un nombre quelconque de fichiers n'importe où sur la page |
-| 📝 Liste de lecture | Cliquez sur un élément pour lire, avancement automatique, effacement en un clic |
-| 🔀 Aléatoire / 🔁 Boucle | Lecture aléatoire ou en boucle |
-| ⏯️ Contrôles | Lecture / pause, arrêt, précédent / suivant, avance/recul de ±10 s |
-| 🔊 Volume | Curseur de volume avec bouton muet |
-| ⛶ Plein écran | Plein écran en un clic avec icône mise à jour automatiquement |
+|  Vidéo /  Audio | Lecture HTML5 des formats web courants (MP4, WebM, MP3, WAV, OGG, …) |
+|  Images | Affichage de PNG, JPG, GIF, WebP, SVG et plus |
+|  Texte & sous-titres | Lecture de TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
+|  Listes de lecture | Ouverture de fichiers `.m3u` / `.m3u8` / `.pls` (locaux et URLs distants) |
+|  Flux distants | Déposez ou chargez un lien HTTP(S) et diffusez-le directement |
+|  Glisser-déposer | Déposez un nombre quelconque de fichiers n'importe où sur la page |
+|  Liste de lecture | Cliquez sur un élément pour lire, avancement automatique, effacement en un clic |
+|  Aléatoire /  Boucle | Lecture aléatoire ou en boucle |
+| ⏯ Contrôles | Lecture / pause, arrêt, précédent / suivant, avance/recul de ±10 s |
+|  Volume | Curseur de volume avec bouton muet |
+|  Plein écran | Plein écran en un clic avec icône mise à jour automatiquement |
 
 ## Raccourcis clavier
 
 | Touche | Action |
 | --- | --- |
 | `Space` | Lecture / pause |
-| `←` / `→` | Reculer / avancer de 10 s |
-| `↑` / `↓` | Volume haut / bas |
+| `` / `` | Reculer / avancer de 10 s |
+| `` / `` | Volume haut / bas |
 | `N` / `P` | Suivant / précédent |
 | `M` | Couper / rétablir le son |
 | `F` | Basculer le plein écran |
