@@ -29,7 +29,7 @@
 
 ## Utilisation
 
-### ▶ En ligne (GitHub Pages)
+###  En ligne (GitHub Pages)
 
 Ouvrez **https://jabar-reda.github.io/vlc-web/** dans n'importe quel navigateur. C'est tout — fonctionne via HTTPS depuis n'importe où.
 
@@ -49,7 +49,7 @@ Double-cliquez sur `index.html` (ou ouvrez-le dans un navigateur via `file://`).
 |  Glisser-déposer | Déposez un nombre quelconque de fichiers n'importe où sur la page |
 |  Liste de lecture | Cliquez sur un élément pour lire, avancement automatique, effacement en un clic |
 |  Aléatoire /  Boucle | Lecture aléatoire ou en boucle |
-| ⏯ Contrôles | Lecture / pause, arrêt, précédent / suivant, avance/recul de ±10 s |
+|  Contrôles | Lecture / pause, arrêt, précédent / suivant, avance/recul de ±10 s |
 |  Volume | Curseur de volume avec bouton muet |
 |  Plein écran | Plein écran en un clic avec icône mise à jour automatiquement |
 

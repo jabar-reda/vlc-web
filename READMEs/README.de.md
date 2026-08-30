@@ -29,7 +29,7 @@
 
 ## Verwendung
 
-### ▶ Online (GitHub Pages)
+###  Online (GitHub Pages)
 
 Öffne **https://jabar-reda.github.io/vlc-web/** in jedem Browser. Das war's — funktioniert über HTTPS von überall.
 
@@ -49,7 +49,7 @@ Doppelklick auf `index.html` (oder öffne es in einem beliebigen Browser über `
 |  Drag & Drop | Beliebig viele Dateien auf die Seite ziehen |
 |  Wiedergabeliste | Einzelne Titel per Klick abspielen, automatischer Weiterlauf, Liste mit einem Klick leeren |
 |  Zufällig /  Schleife | Zufällige oder wiederholte Wiedergabe |
-| ⏯ Steuerung | Abspielen / Pause, Stopp, Vorheriger / Nächster, ±10s Springen |
+|  Steuerung | Abspielen / Pause, Stopp, Vorheriger / Nächster, ±10s Springen |
 |  Lautstärke | Lautstärkeregel mit Stummschalt-Taste |
 |  Vollbild | Ein-Klick-Vollbild mit automatisch aktualisierendem Symbol |
 
