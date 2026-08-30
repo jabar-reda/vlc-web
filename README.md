@@ -12,9 +12,12 @@
 
 A minimalist, black-and-white **web media player** inspired by VLC. It plays video, audio, images, text files, subtitles and playlists entirely in the browser — no installation, no server, no build tools.
 
+## Screenshot
+
+![VLC Web screenshot](assets/screenshot.png)
+
 ## Table of contents
 
-- [Screenshot](#screenshot)
 - [How to use](#how-to-use)
   - [Online (GitHub Pages)](#online-github-pages)
   - [Local (file://)](#local-file)
@@ -26,10 +29,6 @@ A minimalist, black-and-white **web media player** inspired by VLC. It plays vid
 - [Project structure](#project-structure)
 - [Browser support](#browser-support)
 - [License](#license)
-
-## Screenshot
-
-![VLC Web screenshot](assets/screenshot.png)
 
 ## How to use
 
