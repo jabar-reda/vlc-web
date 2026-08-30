@@ -1,7 +1,7 @@
 # VLC Web
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/jabar-reda/vlc-web/main/assets/vlc512x512.png" alt="VLC" width="128">
+  <img src="https://jabar-reda.github.io/vlc-web/assets/vlc512x512.png" alt="VLC" width="128">
 </p>
 
 <p align="center">
@@ -11,6 +11,25 @@
 </p>
 
 A minimalist, black-and-white **web media player** inspired by VLC. It plays video, audio, images, text files, subtitles and playlists entirely in the browser — no installation, no server, no build tools.
+
+## Table of contents
+
+- [Screenshot](#screenshot)
+- [How to use](#how-to-use)
+  - [Online (GitHub Pages)](#online-github-pages)
+  - [Local (file://)](#local-file)
+- [Features](#features)
+- [Keyboard shortcuts](#keyboard-shortcuts)
+- [Supported formats](#supported-formats)
+- [Design](#design)
+- [Architecture](#architecture)
+- [Project structure](#project-structure)
+- [Browser support](#browser-support)
+- [License](#license)
+
+## Screenshot
+
+![VLC Web screenshot](assets/screenshot.png)
 
 ## How to use
 
@@ -22,12 +41,6 @@ Open **https://jabar-reda.github.io/vlc-web/** in any browser. That's it — wor
 
 Double-click `index.html` (or open it in any browser via `file://`). No dependencies, no `npm install`, no build step.
 
-Everything runs client-side with plain HTML + CSS + JavaScript:
-- `index.html` — the page and inline SVG icons
-- `style.css` — the styling
-- `app.js` — all the player logic (single file, no imports)
-- `assets/` — the logo and favicon
-
 ## Features
 
 | Feature | Description |
@@ -36,14 +49,13 @@ Everything runs client-side with plain HTML + CSS + JavaScript:
 | 🖼️ Images | View PNG, JPG, GIF, WebP, SVG and more |
 | 📄 Text & subtitles | Read TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
 | 📃 Playlists | Open `.m3u` / `.m3u8` / `.pls` files (local and remote URLs) |
-| 🔗 Remote URLs | Stream remote media by dropping or loading http, rtsp, rtmp, mms and ftp links |
+| 🔗 Remote streams | Drop or load an HTTP(S) link and stream it directly |
 | 🧲 Drag & drop | Drop any number of files anywhere on the page |
 | 📝 Playlist | Click any item to play, auto-advance, clear with one button |
 | 🔀 Shuffle / 🔁 Loop | Randomized or repeated playback |
 | ⏯️ Transport | Play / pause, stop, previous / next, ±10s seeking |
-| 🔊 Volume | Filled volume slider, mute toggle, keyboard control |
+| 🔊 Volume | Volume slider with mute toggle |
 | ⛶ Fullscreen | One-click fullscreen with an auto-updating icon |
-| ⌨️ Shortcuts | Full keyboard control — no mouse needed |
 
 ## Keyboard shortcuts
 
@@ -65,17 +77,35 @@ Everything the browser's media stack supports is accepted by the file picker and
 - **Audio**: MP3, WAV, M4A, AAC, FLAC, OGG, OPUS, WMA, AIFF, MIDI, AMR and more.
 - **Images**: PNG, JPG, GIF, WebP, SVG, BMP, ICO, AVIF, TIFF, JXL.
 - **Text / data**: TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, log files, and any extension — unknown files open as text.
-- **Subtitle files**: SRT, VTT, SSA, SUB.
 - **Playlists**: M3U, M3U8, PLS.
 
-> **Note**: The browser can only play what it supports natively. Rare containers such as MKV, AVI or FLAC will be added to the playlist but may not decode without a codec plugin. For those, use the desktop VLC application.
+> **Note**: The browser can only play what it supports natively. Rare containers such as MKV, AVI or FLAC are added to the playlist but may not decode without a codec plugin. For those, use the desktop VLC application. Likewise, non-HTTP remote links (rtsp, rtmp, mms, ftp) are added to the playlist but are not streamable in the browser.
 
 ## Design
 
 - Pure black & white palette with subtle grey for secondary elements.
 - Monospace typography for a technical, terminal-like feel.
 - **Lucide** line icons (https://lucide.dev) — stroke-based SVGs inlined in `index.html` that use `currentColor`, so they adapt automatically to the white-on-black theme, including inverted active states.
-- Everything runs from a single `app.js` because browsers block ES module `import`s on `file://` — one classic `<script>` keeps the player working with zero build tools.
+
+## Architecture
+
+Everything runs from a single `app.js` classic `<script>`, because browsers block ES module `import`s on `file://`. One bundled file keeps the player working with zero build tools, zero dependencies and no server. UI state is refreshed on a fixed `setInterval(updateState, 100)`, and files are loaded through `URL.createObjectURL` with object URLs revoked on unload.
+
+## Project structure
+
+```
+VLC/
+├── index.html   # page markup + inline SVG icons
+├── style.css    # styling (monochrome, monospace UI)
+├── app.js       # all player logic (single file, no imports)
+└── assets/      # logo, favicon, screenshot
+```
+
+## Browser support
+
+- Works in modern Chrome, Edge, Firefox and Safari — desktop and mobile.
+- Runs fully from `file://` — no server required.
+- Plays whatever your browser's media stack supports natively (see [Supported formats](#supported-formats)).
 
 ## License
 
