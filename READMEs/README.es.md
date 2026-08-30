@@ -2,20 +2,20 @@
 
 <p align="center">
   <a href="https://jabar-reda.github.io/vlc-web/">
-    <img src="assets/vlc512x512.png" alt="VLC Web" width="128">
+    <img src="../assets/vlc512x512.png" alt="VLC Web" width="128">
   </a>
 </p>
 
 <p align="center">Un reproductor multimedia web minimalista en blanco y negro inspirado en VLC.</p>
 
 <p align="center">
-  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square"></a>
+  <a href="../LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square"></a>
   <a href="https://jabar-reda.github.io/vlc-web/"><img alt="Live demo" src="https://img.shields.io/website?url=https%3A%2F%2Fjabar-reda.github.io%2Fvlc-web%2F&label=live%20demo&style=flat-square"></a>
-  <a href="app.js"><img alt="JS: vanilla" src="https://img.shields.io/badge/JS-vanilla%20zero%20deps-yellow?style=flat-square"></a>
+  <a href="../app.js"><img alt="JS: vanilla" src="https://img.shields.io/badge/JS-vanilla%20zero%20deps-yellow?style=flat-square"></a>
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> |
+  <a href="../README.md">English</a> |
   <a href="README.ar.md">العربية</a> |
   <a href="README.fr.md">Français</a> |
   <a href="README.es.md">Español</a> |
@@ -23,7 +23,7 @@
   <a href="README.zh.md">中文</a>
 </p>
 
-[![Captura de VLC Web](assets/screenshot.png)](https://jabar-reda.github.io/vlc-web/)
+[![Captura de VLC Web](../assets/screenshot.png)](https://jabar-reda.github.io/vlc-web/)
 
 ---
 
@@ -105,4 +105,4 @@ VLC/
 
 ## Licencia
 
-Este proyecto está licenciado bajo la **Licencia MIT** — consulta el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto está licenciado bajo la **Licencia MIT** — consulta el archivo [LICENSE](../LICENSE) para más detalles.
