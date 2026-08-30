@@ -1,12 +1,26 @@
 # VLC Web
 
-A minimalist, black-and-white **web media player** inspired by VLC. It plays video, audio, images, text files, subtitles and playlists entirely in the browser — no installation, no server, no build tools. Just open `index.html`.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jabar-reda/vlc-web/main/assets/vlc512x512.png" alt="VLC" width="128">
+</p>
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
+  <img src="https://img.shields.io/website?url=https%3A%2F%2Fjabar-reda.github.io%2Fvlc-web%2F&label=live%20demo" alt="Live demo">
+  <img src="https://img.shields.io/badge/JS-vanilla%20zero%20deps-yellow.svg" alt="JS: vanilla, zero dependencies">
+</p>
 
-## How to run
+A minimalist, black-and-white **web media player** inspired by VLC. It plays video, audio, images, text files, subtitles and playlists entirely in the browser — no installation, no server, no build tools.
 
-Double-click `index.html` (or open it in any browser via `file://`). That's it. No dependencies, no `npm install`, no build step.
+## How to use
+
+### ▶️ Online (GitHub Pages)
+
+Open **https://jabar-reda.github.io/vlc-web/** in any browser. That's it — works over HTTPS from anywhere.
+
+### 🏠 Local (file://)
+
+Double-click `index.html` (or open it in any browser via `file://`). No dependencies, no `npm install`, no build step.
 
 Everything runs client-side with plain HTML + CSS + JavaScript:
 - `index.html` — the page and inline SVG icons
@@ -22,22 +36,36 @@ Everything runs client-side with plain HTML + CSS + JavaScript:
 | 🖼️ Images | View PNG, JPG, GIF, WebP, SVG and more |
 | 📄 Text & subtitles | Read TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
 | 📃 Playlists | Open `.m3u` / `.m3u8` / `.pls` files (local and remote URLs) |
+| 🔗 Remote URLs | Stream remote media by dropping or loading http, rtsp, rtmp, mms and ftp links |
 | 🧲 Drag & drop | Drop any number of files anywhere on the page |
 | 📝 Playlist | Click any item to play, auto-advance, clear with one button |
 | 🔀 Shuffle / 🔁 Loop | Randomized or repeated playback |
 | ⏯️ Transport | Play / pause, stop, previous / next, ±10s seeking |
 | 🔊 Volume | Filled volume slider, mute toggle, keyboard control |
 | ⛶ Fullscreen | One-click fullscreen with an auto-updating icon |
-| ⌨️ Shortcuts | Space, arrows, N/P, M, F, S — no mouse needed |
+| ⌨️ Shortcuts | Full keyboard control — no mouse needed |
+
+## Keyboard shortcuts
+
+| Key | Action |
+| --- | --- |
+| `Space` | Play / pause |
+| `←` / `→` | Rewind / forward 10s |
+| `↑` / `↓` | Volume up / down |
+| `N` / `P` | Next / previous |
+| `M` | Mute / unmute |
+| `F` | Toggle fullscreen |
+| `S` | Stop |
 
 ## Supported formats
 
 Everything the browser's media stack supports is accepted by the file picker and the drop zone:
 
-- **Video**: MP4 (H.264), WebM (VP8/VP9), OGV, MPEG, and whatever else your browser can decode.
-- **Audio**: MP3, WAV, OGG, M4A, and more.
-- **Images**: PNG, JPG, GIF, WebP, SVG, BMP, AVIF.
+- **Video**: MP4 (H.264), WebM (VP8/VP9), MKV, AVI, MOV, OGV, MPEG, M2TS, TS, FLV, WMV, 3GP and more.
+- **Audio**: MP3, WAV, M4A, AAC, FLAC, OGG, OPUS, WMA, AIFF, MIDI, AMR and more.
+- **Images**: PNG, JPG, GIF, WebP, SVG, BMP, ICO, AVIF, TIFF, JXL.
 - **Text / data**: TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, log files, and any extension — unknown files open as text.
+- **Subtitle files**: SRT, VTT, SSA, SUB.
 - **Playlists**: M3U, M3U8, PLS.
 
 > **Note**: The browser can only play what it supports natively. Rare containers such as MKV, AVI or FLAC will be added to the playlist but may not decode without a codec plugin. For those, use the desktop VLC application.
@@ -47,6 +75,7 @@ Everything the browser's media stack supports is accepted by the file picker and
 - Pure black & white palette with subtle grey for secondary elements.
 - Monospace typography for a technical, terminal-like feel.
 - **Lucide** line icons (https://lucide.dev) — stroke-based SVGs inlined in `index.html` that use `currentColor`, so they adapt automatically to the white-on-black theme, including inverted active states.
+- Everything runs from a single `app.js` because browsers block ES module `import`s on `file://` — one classic `<script>` keeps the player working with zero build tools.
 
 ## License
 
