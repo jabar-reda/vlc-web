@@ -30,7 +30,7 @@ If a proposed change can only work when served over HTTP, it does not belong in 
 ### Clone the repository
 
 ```sh
-git clone https://github.com/redajabar-404/VLC-Web.git
+git clone https://github.com/jabar-reda/vlc-web.git
 cd VLC-Web
 ```
 
