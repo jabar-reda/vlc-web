@@ -22,6 +22,10 @@ function extOf(name) {
   return match ? match[1].toLowerCase() : '';
 }
 
+function safeDecode(str) {
+  try { return decodeURIComponent(str); } catch { return str; }
+}
+
 function classify(name) {
   if (EXT_PATTERNS.video.test(name)) return 'video';
   if (EXT_PATTERNS.audio.test(name)) return 'audio';
@@ -49,15 +53,6 @@ function formatTime(sec) {
     : `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
-function escapeHTML(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
 function readLinesToItems(lines, baseUrl) {
   const entries = [];
   for (const raw of lines) {
@@ -67,7 +62,7 @@ function readLinesToItems(lines, baseUrl) {
     let url = line;
     if (url.startsWith('file://')) url = url.replace(/^file:\/\//, '');
 
-    const name = decodeURIComponent(url.split('/').pop() || '');
+    const name = safeDecode(url.split('/').pop() || '');
     const type = classify(name);
 
     if (/^https?:|^rtsp:|^rtmp:|^mms:|^ftp:/.test(url)) {
@@ -94,7 +89,7 @@ function readPLS(text, baseUrl) {
 
   for (const raw of lines) {
     const line = raw.trim();
-    if (!/^file\d*=/.i.test(line)) continue;
+    if (!/^file\d*\s*=/i.test(line)) continue;
 
     const value = line.replace(/^file\d*\s*=\s*/i, '').trim();
     if (!value) continue;
@@ -102,7 +97,7 @@ function readPLS(text, baseUrl) {
     let url = value;
     if (url.startsWith('file://')) url = url.replace(/^file:\/\//, '');
 
-    const name = decodeURIComponent(url.split('/').pop() || '');
+    const name = safeDecode(url.split('/').pop() || '');
     const type = classify(name);
 
     if (/^https?:|^rtsp:|^rtmp:|^mms:|^ftp:/.test(url)) {
@@ -133,6 +128,9 @@ class PlayerService {
     this.dropzone = elements.dropzone;
     this.placeholder = elements.placeholder;
     this.nowPlaying = elements.nowPlaying;
+    this.seekbar = elements.seekbar;
+    this.currentTimeEl = elements.currentTime;
+    this.totalTimeEl = elements.totalTime;
     this.setupEventListeners();
   }
 
@@ -144,6 +142,7 @@ class PlayerService {
   }
 
   loadItem(index) {
+    isSeeking = false;
     if (index < 0 || index >= this.items.length) return;
     const item = this.items[index];
     this.currentIndex = index;
@@ -158,15 +157,32 @@ class PlayerService {
     } else if (item.type === 'image') {
       this.imageView.style.display = 'block';
       this.imageView.src = item.url;
+      this.video.removeAttribute('src');
+      this.video.load();
+      this.seekbar.value = '0';
+      this.currentTimeEl.textContent = '00:00';
+      this.totalTimeEl.textContent = '--:--';
     } else {
       this.textView.style.display = 'block';
+      this.video.removeAttribute('src');
+      this.video.load();
+      this.seekbar.value = '0';
+      this.currentTimeEl.textContent = '00:00';
+      this.totalTimeEl.textContent = '--:--';
       this.loadTextFile(item);
     }
 
-    this.nowPlaying.innerHTML = `<span class="t">${typeLabel(item.type)}</span> &ndash; ${escapeHTML(item.name)}`;
+    this.nowPlaying.textContent = '';
+    const typeSpan = document.createElement('span');
+    typeSpan.className = 't';
+    typeSpan.textContent = typeLabel(item.type);
+    this.nowPlaying.appendChild(typeSpan);
+    this.nowPlaying.appendChild(document.createTextNode(` \u2013 ${item.name}`));
+    renderPlaylist();
   }
 
   hideAllMedia() {
+    this.video.pause();
     this.video.style.display = 'none';
     this.imageView.style.display = 'none';
     this.textView.style.display = 'none';
@@ -174,7 +190,8 @@ class PlayerService {
   }
 
   playPause() {
-    if (this.currentIndex === -1) return;
+    const item = this.items[this.currentIndex];
+    if (!item || (item.type !== 'video' && item.type !== 'audio')) return;
     if (this.video.paused) {
       this.video.play().catch(() => {});
     } else {
@@ -275,7 +292,27 @@ class PlayerService {
     }
     const start = this.items.length;
     this.items = [...this.items, ...entries];
-    if (this.currentIndex === -1 && entries.length) this.loadItem(start);
+    if (this.currentIndex === -1 && entries.length) {
+      this.loadItem(start);
+    } else if (entries.length) {
+      renderPlaylist();
+    }
+  }
+
+  addUrl(url) {
+    const trimmed = (url || '').trim();
+    if (!/^https?:\/\//i.test(trimmed)) {
+      this.nowPlaying.innerHTML = '<span class="t">Unsupported</span> &ndash; only http/https links can be opened';
+      return false;
+    }
+    let path = trimmed;
+    try { path = new URL(trimmed).pathname; } catch { /* keep full URL as fallback */ }
+    const base = safeDecode(path.split('/').pop() || '');
+    const label = base || trimmed;
+    const item = { name: label, type: classify(base || path), remote: true, url: trimmed };
+    this.items.push(item);
+    this.loadItem(this.items.length - 1);
+    return true;
   }
 
   clearPlaylist() {
@@ -288,6 +325,7 @@ class PlayerService {
     this.stop();
     this.hideAllMedia();
     this.placeholder.style.display = 'flex';
+    renderPlaylist();
   }
 
   async loadTextFile(item) {
@@ -354,10 +392,9 @@ class DragDropService {
       }
 
       const urls = dt.getData('text/uri-list') || '';
-      const first = urls.split(/\r?\n/)[0];
-      if (first && /^https?:|^rtsp:|^rtmp:|^mms:|^ftp:/.test(first)) {
-        const name = decodeURIComponent(first.split('/').pop() || '');
-        playerService.addFiles([new File([], name, { type: 'text/uri-list' })]);
+      const first = urls.split(/\r?\n/).map(line => line.trim()).find(line => line && !line.startsWith('#'));
+      if (first) {
+        playerService.addUrl(first);
       }
     });
 
@@ -379,6 +416,7 @@ class KeyboardService {
   constructor(playerService) {
     document.addEventListener('keydown', e => {
       if (e.target.tagName === 'INPUT') return;
+      if (e.target instanceof Element && e.target.closest('button') && (e.key === ' ' || e.key === 'Enter')) return;
 
       switch (e.key) {
         case ' ':
@@ -467,6 +505,9 @@ const playerService = new PlayerService({
   dropzone: elements.dropzone,
   placeholder: elements.placeholder,
   nowPlaying: elements.nowPlaying,
+  seekbar: elements.seekbar,
+  currentTime: elements.currentTime,
+  totalTime: elements.totalTime,
 });
 
 const dragDropService = new DragDropService(elements.dropzone, elements.placeholder, playerService);
@@ -490,11 +531,35 @@ elements.stopBtn.addEventListener('click', () => playerService.stop());
 elements.forwardBtn.addEventListener('click', () => playerService.forward());
 elements.nextBtn.addEventListener('click', () => playerService.next());
 
+let isSeeking = false;
+
+elements.seekbar.addEventListener('pointerdown', (e) => {
+  isSeeking = true;
+  elements.seekbar.setPointerCapture(e.pointerId);
+});
+elements.seekbar.addEventListener('lostpointercapture', () => { isSeeking = false; });
+elements.seekbar.addEventListener('pointercancel', () => { isSeeking = false; });
+elements.seekbar.addEventListener('change', () => { isSeeking = false; });
+window.addEventListener('pointerup', () => { isSeeking = false; });
+
 elements.seekbar.addEventListener('input', () => {
   if (elements.video.duration && !isNaN(elements.video.duration)) {
     elements.video.currentTime = parseFloat(elements.seekbar.value);
   }
 });
+
+elements.video.addEventListener('timeupdate', () => {
+  syncDurationUI();
+  if (isSeeking || elements.seekbar.disabled) return;
+  elements.seekbar.value = String(elements.video.currentTime);
+  elements.currentTime.textContent = formatTime(elements.video.currentTime);
+});
+
+elements.video.addEventListener('loadedmetadata', syncDurationUI);
+elements.video.addEventListener('durationchange', syncDurationUI);
+elements.video.addEventListener('play', syncTransportUI);
+elements.video.addEventListener('pause', syncTransportUI);
+elements.video.addEventListener('volumechange', syncTransportUI);
 
 elements.volumeBar.addEventListener('input', () => {
   const volume = parseFloat(elements.volumeBar.value) / 100;
@@ -530,54 +595,64 @@ elements.loopBtn.addEventListener('click', () => {
   elements.loopBtn.classList.toggle('active', playerService.isLooped);
 });
 
+document.addEventListener('click', e => {
+  const target = e.target instanceof Element ? e.target.closest('button, #seekbar, #volumeBar') : null;
+  if (target && e.detail > 0) target.blur();
+});
+
 function updateMuteState() {
   const muted = playerService.getIsMuted();
   elements.volumeBtn.classList.toggle('is-muted', muted);
   elements.volumeBar.classList.toggle('is-muted', muted);
 }
 
+function syncDurationUI() {
+  const duration = elements.video.duration;
+  const isKnown = isFinite(duration) && duration > 0;
+  elements.seekbar.disabled = !isKnown;
+  if (!isKnown) {
+    elements.totalTime.textContent = '--:--';
+    return;
+  }
+  elements.seekbar.max = String(duration);
+  elements.totalTime.textContent = formatTime(duration);
+}
+
+function syncTransportUI() {
+  elements.playBtn.classList.toggle('is-playing', !elements.video.paused);
+
+  const volumePercent = Math.round(playerService.getVolume() * 100);
+  elements.volumeBar.value = String(volumePercent);
+  elements.volumeBar.style.setProperty('--vol', `${volumePercent}%`);
+  updateMuteState();
+
+  elements.fullscreenBtn.classList.toggle('is-fullscreen', !!document.fullscreenElement);
+  elements.shuffleBtn.classList.toggle('active', playerService.isShuffled);
+  elements.loopBtn.classList.toggle('active', playerService.isLooped);
+}
+
 function renderPlaylist() {
-  elements.playlistEl.innerHTML = '';
+  elements.playlistEl.textContent = '';
   playerService.items.forEach((item, index) => {
     const li = document.createElement('li');
     li.dataset.index = String(index);
     li.className = index === playerService.currentIndex ? 'active' : '';
-    li.innerHTML = `
-      <span class="num">${String(index + 1).padStart(2, '0')}</span>
-      <span>${shortName(item.name)}</span>
-    `;
-    li.title = `${escapeHTML(item.name)} &ndash; ${item.type}`;
+
+    const num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = String(index + 1).padStart(2, '0');
+
+    const label = document.createElement('span');
+    label.textContent = shortName(item.name);
+
+    li.appendChild(num);
+    li.appendChild(label);
+    li.title = `${item.name} \u2013 ${item.type}`;
     li.addEventListener('click', () => playerService.loadItem(index));
     elements.playlistEl.appendChild(li);
   });
   elements.count.textContent = String(playerService.items.length);
 }
-
-function updateState() {
-  elements.playBtn.classList.toggle('is-playing', !elements.video.paused);
-
-  if (elements.video.duration && !isNaN(elements.video.duration)) {
-    elements.seekbar.max = String(elements.video.duration);
-    elements.seekbar.value = String(elements.video.currentTime);
-    elements.currentTime.textContent = formatTime(elements.video.currentTime);
-    elements.totalTime.textContent = formatTime(elements.video.duration);
-  }
-
-  const volume = playerService.getVolume();
-  elements.volumeBar.value = String(Math.round(volume * 100));
-  elements.volumeBar.style.setProperty('--vol', `${Math.round(volume * 100)}%`);
-
-  updateMuteState();
-
-  elements.fullscreenBtn.classList.toggle('is-fullscreen', !!document.fullscreenElement);
-
-  elements.shuffleBtn.classList.toggle('active', playerService.isShuffled);
-  elements.loopBtn.classList.toggle('active', playerService.isLooped);
-
-  renderPlaylist();
-}
-
-setInterval(updateState, 100);
 
 window.addEventListener('beforeunload', () => {
   playerService.items.forEach((item) => {

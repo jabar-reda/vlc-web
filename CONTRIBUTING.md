@@ -31,7 +31,7 @@ If a proposed change can only work when served over HTTP, it does not belong in 
 
 ```sh
 git clone https://github.com/jabar-reda/vlc-web.git
-cd VLC-Web
+cd vlc-web
 ```
 
 ### Open the app locally
@@ -55,7 +55,7 @@ The app runs entirely from the local file system. You do not need a web server, 
 ## Project structure
 
 ```
-VLC/
+vlc-web/
 ├── index.html        # Page markup + inline SVG icons (<symbol> elements using currentColor)
 ├── style.css         # All styling — monochrome, monospace UI
 ├── app.js            # The entire application (see below)
@@ -73,7 +73,7 @@ VLC/
 | Constants | `EXT_PATTERNS` and similar module-level data |
 | Helpers | `classify`, `readM3U`, `readPLS`, `formatTime`, and other plain functions |
 | Services | `PlayerService`, `DragDropService`, `KeyboardService` |
-| Wiring | DOM lookup, event binding, and `setInterval(updateState, 100)` |
+| Wiring | DOM lookup and event binding for media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`) |
 
 **Order matters.** Helpers, constants, and classes must be defined before the wiring code that uses them. The script runs top-to-bottom, so a function referenced too early will be unavailable at runtime. Keep the structure: constants → helpers → classes → wiring.
 
@@ -110,19 +110,19 @@ Keep changes small and focused. A PR that does one thing well is far easier to r
 - **Icons are raw inline Lucide SVGs** defined as `<symbol>` elements in `index.html`.
 - Icons use `currentColor` so they inherit the theme automatically. When adding or modifying an icon, edit the inline `<symbol>` in `index.html` — do **not** add a JavaScript icon library, icon font, or external asset.
 - Keep the UI monochrome and monospace. Styling lives in `style.css`; do not introduce color themes, images, or non-monospace fonts as a normal part of the UI.
-- UI state is refreshed on a fixed `setInterval(updateState, 100)` loop. Follow this pattern rather than introducing a one-off rendering mechanism for new UI.
+- UI state updates from media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`), and `renderPlaylist()` runs only when the playlist changes (`loadItem` — which also covers `addUrl` — `addFiles`, and `clearPlaylist`). Follow this pattern rather than introducing a one-off rendering mechanism for new UI.
 
 ### Media-file and resource handling
 
 - Locally dropped or opened files are loaded via `URL.createObjectURL`. These object URLs must be revoked (`URL.revokeObjectURL`) on unload and when the playlist is cleared, to avoid memory leaks.
-- Remote URLs (`http`, `rtsp`, and similar) must be flagged with `remote: true` and are **never** revoked.
+- Remote URLs — playlist entries (`http`, `rtsp`, and similar) or dropped `http(s)` links — must be flagged with `remote: true` and are **never** revoked.
 - Any new path that handles local files must respect this revoke/never-revoke split.
 
 ---
 
 ## How to test manually
 
-There is **no automated test suite, linter, or typechecker** — the project is intentionally minimal, and this is by design. Verification is manual. After any change, run through the relevant parts of this checklist by opening `index.html` from `file://` (not a server).
+There is **no automated test suite or linter**; CI runs `node --check app.js` to catch syntax errors — behavioral verification stays manual via the checklist below. After any change, run through the relevant parts of this checklist by opening `index.html` from `file://` (not a server).
 
 > ### Manual testing checklist
 >
@@ -132,8 +132,8 @@ There is **no automated test suite, linter, or typechecker** — the project is 
 > | Dragging files | Dragging one or more files onto the window adds them to the playlist and plays as expected. |
 > | Playlists | `.m3u` and `.pls` files are parsed correctly (`readM3U` / `readPLS`); entries appear in order with correct titles. |
 > | Keyboard shortcuts | All documented shortcuts work; nothing throws in the console. |
-> | Remote streams | Opening an `http`/`rtsp` stream works; `remote: true` is set; the URL is not revoked on playlist clear. |
-> | UI refresh | Time, position, and state indicators update on the 100ms `updateState` loop. |
+> | Remote streams | Opening an `http(s)` link with a media extension works; other protocols are rejected with a message. Playlist entries carry `remote: true` and are never revoked on clear. |
+> | UI refresh | Time, position, and state indicators update from media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`). |
 > | Clear playlist | Clearing revokes object URLs for local files and does not error on remote ones. |
 > | Icons | Any new/edited SVG `<symbol>` renders with `currentColor` in both light and (if present) dark contexts. |
 > | `file://` from scratch | Start from a clean state by double-clicking `index.html`; nothing depends on a server or origin. |

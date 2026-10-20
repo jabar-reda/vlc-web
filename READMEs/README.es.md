@@ -45,7 +45,7 @@ Haz doble clic en `index.html` (o ábrelo en cualquier navegador mediante `file:
 |  Imágenes | Ver PNG, JPG, GIF, WebP, SVG y más |
 |  Texto y subtítulos | Leer TXT, MD, SRT, VTT, ASS, CSV, JSON, registros… |
 |  Listas de reproducción | Abrir archivos `.m3u` / `.m3u8` / `.pls` (URLs locales y remotas) |
-|  Transmisiones remotas | Suelta o carga un enlace HTTP(S) y reprodúcelo directamente |
+|  Transmisiones remotas | Suelta o carga un enlace HTTP(S) y reprodúcelo directamente (http/https, se requiere extensión de medio) |
 |  Arrastrar y soltar | Suelta cualquier cantidad de archivos en cualquier parte de la página |
 |  Lista de reproducción | Haz clic en cualquier elemento para reproducirlo, avance automático, borrar con un botón |
 |  Aleatorio /  Bucle | Reproducción aleatoria o repetida |
@@ -75,7 +75,7 @@ Todo lo que admite de forma nativa el sistema multimedia del navegador es acepta
 - **Texto / datos**: TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, archivos de registro y cualquier extensión — los archivos desconocidos se abren como texto.
 - **Listas de reproducción**: M3U, M3U8, PLS.
 
-> **Nota**: el navegador solo puede reproducir lo que admite de forma nativa. Los contenedores poco comunes, como MKV, AVI o FLAC, se añaden a la lista de reproducción pero es posible que no se descodifiquen sin un plugin de códecs. Para ellos, usa la aplicación de escritorio de VLC. Del mismo modo, los enlaces remotos que no usan HTTP (rtsp, rtmp, mms, ftp) se añaden a la lista de reproducción pero no se pueden transmitir en el navegador.
+> **Nota**: el navegador solo puede reproducir lo que admite de forma nativa. Los contenedores poco comunes, como MKV, AVI o FLAC, se añaden a la lista de reproducción pero es posible que no se descodifiquen sin un plugin de códecs. Para ellos, usa la aplicación de escritorio de VLC. Al soltar un enlace directamente solo se acepta `http(s)`: el enlace se clasifica según la extensión de su ruta, así que debe llevar una extensión de medio admitida; los demás protocolos se rechazan con un mensaje. Las entradas que no usan HTTP y se encuentran *dentro* de los archivos de lista de reproducción se añaden a la lista, pero no se pueden transmitir en el navegador.
 
 ## Diseño
 
@@ -85,12 +85,12 @@ Todo lo que admite de forma nativa el sistema multimedia del navegador es acepta
 
 ## Arquitectura
 
-Todo se ejecuta desde un único `<script>` clásico en `app.js`, porque los navegadores bloquean los `import` de módulos ES en `file://`. Un único archivo agrupado mantiene el reproductor funcionando sin herramientas de compilación, sin dependencias y sin servidor. El estado de la interfaz se actualiza con un `setInterval(updateState, 100)` fijo, y los archivos se cargan mediante `URL.createObjectURL`, revocándose las URLs de objeto al cerrar la página.
+Todo se ejecuta desde un único `<script>` clásico en `app.js`, porque los navegadores bloquean los `import` de módulos ES en `file://`. Un único archivo agrupado mantiene el reproductor funcionando sin herramientas de compilación, sin dependencias y sin servidor. El estado de la interfaz se actualiza a partir de los eventos multimedia (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`), la lista de reproducción se vuelve a dibujar cuando cambian su contenido o el elemento actual, y los archivos se cargan mediante `URL.createObjectURL`, revocándose las URLs de objeto al cerrar la página.
 
 ## Estructura del proyecto
 
 ```
-VLC/
+vlc-web/
 ├── index.html   # marcado de la página + iconos SVG
 ├── style.css    # estilos (interfaz monocroma, monoespaciada)
 ├── app.js       # toda la lógica del reproductor (un solo archivo, sin imports)
