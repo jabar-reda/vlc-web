@@ -522,6 +522,7 @@ let isSeeking = false;
 elements.seekbar.addEventListener('pointerdown', () => { isSeeking = true; });
 elements.seekbar.addEventListener('pointerup', () => { isSeeking = false; });
 elements.seekbar.addEventListener('change', () => { isSeeking = false; });
+window.addEventListener('pointerup', () => { isSeeking = false; });
 
 elements.seekbar.addEventListener('input', () => {
   if (elements.video.duration && !isNaN(elements.video.duration)) {
@@ -530,10 +531,7 @@ elements.seekbar.addEventListener('input', () => {
 });
 
 elements.video.addEventListener('timeupdate', () => {
-  const duration = elements.video.duration;
-  if (!isFinite(duration) || duration <= 0) return;
-  elements.seekbar.max = String(duration);
-  elements.totalTime.textContent = formatTime(duration);
+  syncDurationUI();
   if (isSeeking) return;
   elements.seekbar.value = String(elements.video.currentTime);
   elements.currentTime.textContent = formatTime(elements.video.currentTime);
