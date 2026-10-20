@@ -128,6 +128,9 @@ class PlayerService {
     this.dropzone = elements.dropzone;
     this.placeholder = elements.placeholder;
     this.nowPlaying = elements.nowPlaying;
+    this.seekbar = elements.seekbar;
+    this.currentTimeEl = elements.currentTime;
+    this.totalTimeEl = elements.totalTime;
     this.setupEventListeners();
   }
 
@@ -156,10 +159,16 @@ class PlayerService {
       this.imageView.src = item.url;
       this.video.removeAttribute('src');
       this.video.load();
+      this.seekbar.value = '0';
+      this.currentTimeEl.textContent = '00:00';
+      this.totalTimeEl.textContent = '--:--';
     } else {
       this.textView.style.display = 'block';
       this.video.removeAttribute('src');
       this.video.load();
+      this.seekbar.value = '0';
+      this.currentTimeEl.textContent = '00:00';
+      this.totalTimeEl.textContent = '--:--';
       this.loadTextFile(item);
     }
 
@@ -496,6 +505,9 @@ const playerService = new PlayerService({
   dropzone: elements.dropzone,
   placeholder: elements.placeholder,
   nowPlaying: elements.nowPlaying,
+  seekbar: elements.seekbar,
+  currentTime: elements.currentTime,
+  totalTime: elements.totalTime,
 });
 
 const dragDropService = new DragDropService(elements.dropzone, elements.placeholder, playerService);
