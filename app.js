@@ -94,7 +94,7 @@ function readPLS(text, baseUrl) {
 
   for (const raw of lines) {
     const line = raw.trim();
-    if (!/^file\d*=/.i.test(line)) continue;
+    if (!/^file\d*=/i.test(line)) continue;
 
     const value = line.replace(/^file\d*\s*=\s*/i, '').trim();
     if (!value) continue;
