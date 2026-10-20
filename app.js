@@ -153,8 +153,12 @@ class PlayerService {
     } else if (item.type === 'image') {
       this.imageView.style.display = 'block';
       this.imageView.src = item.url;
+      this.video.removeAttribute('src');
+      this.video.load();
     } else {
       this.textView.style.display = 'block';
+      this.video.removeAttribute('src');
+      this.video.load();
       this.loadTextFile(item);
     }
 
@@ -176,7 +180,8 @@ class PlayerService {
   }
 
   playPause() {
-    if (this.currentIndex === -1) return;
+    const item = this.items[this.currentIndex];
+    if (!item || (item.type !== 'video' && item.type !== 'audio')) return;
     if (this.video.paused) {
       this.video.play().catch(() => {});
     } else {
