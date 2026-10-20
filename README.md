@@ -11,7 +11,24 @@
 <p align="center">
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square"></a>
   <a href="https://jabar-reda.github.io/vlc-web/"><img alt="Live demo" src="https://img.shields.io/website?url=https%3A%2F%2Fjabar-reda.github.io%2Fvlc-web%2F&label=live%20demo&style=flat-square"></a>
-  <a href="app.js"><img alt="JS: vanilla" src="https://img.shields.io/badge/JS-vanilla%20zero%20deps-yellow?style=flat-square"></a>
+  <a href="app.js"><img alt="JS: vanilla" src="https://img.shields.io/badge/JS-vanilla-lightgrey?style=flat-square"></a>
+  <a href="https://github.com/jabar-reda/vlc-web/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jabar-reda/vlc-web/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://jabar-reda.github.io/vlc-web/"><img alt="Deploy" src="https://github.com/jabar-reda/vlc-web/actions/workflows/dynamic/pages/pages-build-deployment/badge.svg"></a>
+</p>
+
+<p align="center">
+  <img alt="Dependencies" src="https://img.shields.io/badge/dependencies-0-lightgrey?style=flat-square">
+  <img alt="No build step" src="https://img.shields.io/badge/build-none%20required-lightgrey?style=flat-square">
+  <img alt="Runs fully local" src="https://img.shields.io/badge/runs%20fully%20local-lightgrey?style=flat-square">
+  <img alt="Browsers" src="https://img.shields.io/badge/browsers-chrome%20firefox%20safari%20edge-lightgrey?style=flat-square">
+  <a href="https://github.com/jabar-reda/vlc-web/tree/main/READMEs"><img alt="Languages" src="https://img.shields.io/badge/README-5%20languages-lightgrey?style=flat-square"></a>
+  <a href="https://github.com/jabar-reda/vlc-web/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/jabar-reda/vlc-web?style=flat-square"></a>
+  <a href="https://github.com/jabar-reda/vlc-web/network/members"><img alt="Forks" src="https://img.shields.io/github/forks/jabar-reda/vlc-web?style=flat-square"></a>
+  <a href="https://github.com/jabar-reda/vlc-web/issues"><img alt="Issues" src="https://img.shields.io/github/issues/jabar-reda/vlc-web?style=flat-square"></a>
+  <a href="https://github.com/jabar-reda/vlc-web/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/jabar-reda/vlc-web?style=flat-square"></a>
+  <a href="CONTRIBUTING.md"><img alt="Contributing" src="https://img.shields.io/badge/contributions-welcome-blue?style=flat-square"></a>
+  <a href="CODE_OF_CONDUCT.md"><img alt="Code of conduct" src="https://img.shields.io/badge/code%20of%20conduct-Contributor%20Covenant%202.1-blue?style=flat-square"></a>
+  <a href="SECURITY.md"><img alt="Security policy" src="https://img.shields.io/badge/security-policy-blue?style=flat-square"></a>
 </p>
 
 <p align="center">
