@@ -132,7 +132,7 @@ There is **no automated test suite, linter, or typechecker** — the project is 
 > | Dragging files | Dragging one or more files onto the window adds them to the playlist and plays as expected. |
 > | Playlists | `.m3u` and `.pls` files are parsed correctly (`readM3U` / `readPLS`); entries appear in order with correct titles. |
 > | Keyboard shortcuts | All documented shortcuts work; nothing throws in the console. |
-> | Remote streams | Opening an `http(s)` link works; other protocols are rejected with a message. Playlist entries carry `remote: true` and are never revoked on clear. |
+> | Remote streams | Opening an `http(s)` link with a media extension works; other protocols are rejected with a message. Playlist entries carry `remote: true` and are never revoked on clear. |
 > | UI refresh | Time, position, and state indicators update from media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`). |
 > | Clear playlist | Clearing revokes object URLs for local files and does not error on remote ones. |
 > | Icons | Any new/edited SVG `<symbol>` renders with `currentColor` in both light and (if present) dark contexts. |
