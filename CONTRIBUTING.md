@@ -122,7 +122,7 @@ Keep changes small and focused. A PR that does one thing well is far easier to r
 
 ## How to test manually
 
-There is **no automated test suite, linter, or typechecker** — the project is intentionally minimal, and this is by design. Verification is manual. After any change, run through the relevant parts of this checklist by opening `index.html` from `file://` (not a server).
+There is **no automated test suite or linter**; CI runs `node --check app.js` to catch syntax errors — behavioral verification stays manual via the checklist below. After any change, run through the relevant parts of this checklist by opening `index.html` from `file://` (not a server).
 
 > ### Manual testing checklist
 >
