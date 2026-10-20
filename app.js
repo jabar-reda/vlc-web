@@ -585,8 +585,8 @@ elements.loopBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('click', e => {
-  const btn = e.target instanceof Element ? e.target.closest('button') : null;
-  if (btn && e.detail > 0) btn.blur();
+  const target = e.target instanceof Element ? e.target.closest('button, #seekbar, #volumeBar') : null;
+  if (target && e.detail > 0) target.blur();
 });
 
 function updateMuteState() {
