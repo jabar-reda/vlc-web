@@ -405,7 +405,7 @@ class KeyboardService {
   constructor(playerService) {
     document.addEventListener('keydown', e => {
       if (e.target.tagName === 'INPUT') return;
-      if (e.target.closest('button') && (e.key === ' ' || e.key === 'Enter')) return;
+      if (e.target instanceof Element && e.target.closest('button') && (e.key === ' ' || e.key === 'Enter')) return;
 
       switch (e.key) {
         case ' ':
@@ -577,6 +577,11 @@ elements.shuffleBtn.addEventListener('click', () => {
 elements.loopBtn.addEventListener('click', () => {
   playerService.toggleLoop();
   elements.loopBtn.classList.toggle('active', playerService.isLooped);
+});
+
+document.addEventListener('click', e => {
+  const btn = e.target instanceof Element ? e.target.closest('button') : null;
+  if (btn && e.detail > 0) btn.blur();
 });
 
 function updateMuteState() {
