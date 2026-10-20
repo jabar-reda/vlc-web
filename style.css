@@ -220,6 +220,11 @@ main {
   cursor: pointer;
 }
 
+#seekbar:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 #seekbar::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;

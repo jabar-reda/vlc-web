@@ -538,7 +538,7 @@ elements.seekbar.addEventListener('input', () => {
 
 elements.video.addEventListener('timeupdate', () => {
   syncDurationUI();
-  if (isSeeking) return;
+  if (isSeeking || elements.seekbar.disabled) return;
   elements.seekbar.value = String(elements.video.currentTime);
   elements.currentTime.textContent = formatTime(elements.video.currentTime);
 });
@@ -596,7 +596,12 @@ function updateMuteState() {
 
 function syncDurationUI() {
   const duration = elements.video.duration;
-  if (!isFinite(duration) || duration <= 0) return;
+  const isKnown = isFinite(duration) && duration > 0;
+  elements.seekbar.disabled = !isKnown;
+  if (!isKnown) {
+    elements.totalTime.textContent = '--:--';
+    return;
+  }
   elements.seekbar.max = String(duration);
   elements.totalTime.textContent = formatTime(duration);
 }
