@@ -282,8 +282,11 @@ class PlayerService {
     }
     const start = this.items.length;
     this.items = [...this.items, ...entries];
-    if (this.currentIndex === -1 && entries.length) this.loadItem(start);
-    renderPlaylist();
+    if (this.currentIndex === -1 && entries.length) {
+      this.loadItem(start);
+    } else if (entries.length) {
+      renderPlaylist();
+    }
   }
 
   addUrl(url, name) {
@@ -299,7 +302,6 @@ class PlayerService {
     const item = { name: label, type: classify(base || path), remote: true, url: trimmed };
     this.items.push(item);
     this.loadItem(this.items.length - 1);
-    renderPlaylist();
     return true;
   }
 
