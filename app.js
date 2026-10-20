@@ -53,15 +53,6 @@ function formatTime(sec) {
     : `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
-function escapeHTML(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
 function readLinesToItems(lines, baseUrl) {
   const entries = [];
   for (const raw of lines) {
