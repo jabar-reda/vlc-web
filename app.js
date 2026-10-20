@@ -292,8 +292,11 @@ class PlayerService {
       this.nowPlaying.innerHTML = '<span class="t">Unsupported</span> &ndash; only http/https links can be opened';
       return false;
     }
-    const label = name || safeDecode(trimmed.split('/').pop()) || trimmed;
-    const item = { name: label, type: classify(label), remote: true, url: trimmed };
+    let path = trimmed;
+    try { path = new URL(trimmed).pathname; } catch { /* keep full URL as fallback */ }
+    const base = safeDecode(path.split('/').pop() || '');
+    const label = name || base || trimmed;
+    const item = { name: label, type: classify(base || path), remote: true, url: trimmed };
     this.items.push(item);
     this.loadItem(this.items.length - 1);
     renderPlaylist();
