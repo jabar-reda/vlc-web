@@ -45,7 +45,7 @@ Double-cliquez sur `index.html` (ou ouvrez-le dans un navigateur via `file://`).
 |  Images | Affichage de PNG, JPG, GIF, WebP, SVG et plus |
 |  Texte & sous-titres | Lecture de TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
 |  Listes de lecture | Ouverture de fichiers `.m3u` / `.m3u8` / `.pls` (locaux et URLs distants) |
-|  Flux distants | Déposez ou chargez un lien HTTP(S) et diffusez-le directement |
+|  Flux distants | Déposez ou chargez un lien HTTP(S) et diffusez-le directement (http/https, extension média requise) |
 |  Glisser-déposer | Déposez un nombre quelconque de fichiers n'importe où sur la page |
 |  Liste de lecture | Cliquez sur un élément pour lire, avancement automatique, effacement en un clic |
 |  Aléatoire /  Boucle | Lecture aléatoire ou en boucle |
@@ -75,22 +75,22 @@ Tout ce que la pile multimédia du navigateur prend en charge est accepté par l
 - **Texte / données** : TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, fichiers log, et toute extension — les fichiers inconnus s'ouvrent en texte.
 - **Listes de lecture** : M3U, M3U8, PLS.
 
-> **Remarque** : Le navigateur ne peut lire que ce qu'il supporte nativement. Les conteneurs rares comme MKV, AVI ou FLAC sont ajoutés à la liste de lecture mais peuvent ne pas être décodés sans un plugin de codecs. Pour ceux-là, utilisez l'application desktop VLC. De même, les liens distants hors HTTP (rtsp, rtmp, mms, ftp) sont ajoutés à la liste de lecture mais ne sont pas diffusables dans le navigateur.
+> **Remarque** : Le navigateur ne peut lire que ce qu'il supporte nativement. Les conteneurs rares comme MKV, AVI ou FLAC sont ajoutés à la liste de lecture mais peuvent ne pas être décodés sans un plugin de codecs. Pour ceux-là, utilisez l'application desktop VLC. Déposer directement un lien n'accepte que `http(s)` — le lien est classé d'après l'extension de son chemin, il doit donc porter une extension média prise en charge ; les autres protocoles sont refusés avec un message. Les entrées hors HTTP trouvées *dans* les fichiers de liste de lecture sont ajoutées à la liste mais ne peuvent pas être diffusées dans le navigateur.
 
 ## Design
 
 - Palette strictement noire et blanche avec du gris subtil pour les éléments secondaires.
 - Typographie à chasse fixe pour un rendu technique, à la manière d'un terminal.
-- Icônes **Lucide** en ligne fine (https://lucide.dev) — SVG à trait inclinés, intégrés dans `index.html` et utilisant `currentColor`, ce qui les adapte automatiquement au thème blanc sur noir, y compris pour les états actifs inversés.
+- Icônes **Lucide** en ligne fine (https://lucide.dev) — SVG à trait, intégrés dans `index.html` et utilisant `currentColor`, ce qui les adapte automatiquement au thème blanc sur noir, y compris pour les états actifs inversés.
 
 ## Architecture
 
-Tout s'exécute depuis un seul `<script classique>` dans `app.js`, car les navigateurs bloquent les `import` ES modules en mode `file://`. Un fichier unique permet au lecteur de fonctionner sans aucun outil de build, aucune dépendance et aucun serveur. L'état de l'interface est rafraîchi via un `setInterval(updateState, 100)` fixe, et les fichiers sont chargés via `URL.createObjectURL` avec révocation des URLs objet au déchargement.
+Tout s'exécute depuis un seul `<script classique>` dans `app.js`, car les navigateurs bloquent les `import` ES modules en mode `file://`. Un fichier unique permet au lecteur de fonctionner sans aucun outil de build, aucune dépendance et aucun serveur. L'état de l'interface est mis à jour à partir des événements multimédia (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`), la liste de lecture se redessine lorsque son contenu ou l'élément courant change, et les fichiers sont chargés via `URL.createObjectURL` avec révocation des URLs objet au déchargement.
 
 ## Structure du projet
 
 ```
-VLC/
+vlc-web/
 ├── index.html   # balisage de la page + icônes SVG inline
 ├── style.css    # style (interface monochrome, police à chasse fixe)
 ├── app.js       # toute la logique du lecteur (fichier unique, sans import)

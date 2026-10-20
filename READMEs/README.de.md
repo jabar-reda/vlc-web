@@ -45,7 +45,7 @@ Doppelklick auf `index.html` (oder öffne es in einem beliebigen Browser über `
 |  Bilder | Anzeige von PNG, JPG, GIF, WebP, SVG und mehr |
 |  Text & Untertitel | Anzeige von TXT, MD, SRT, VTT, ASS, CSV, JSON, Logs… |
 |  Wiedergabelisten | Öffnen von `.m3u` / `.m3u8` / `.pls`-Dateien (lokal und remote URLs) |
-|  Remote-Streams | HTTP(S)-Links per Drag & Drop oder Eingabe laden und direkt streamen |
+|  Remote-Streams | HTTP(S)-Links per Drag & Drop oder Eingabe laden und direkt streamen (http/https, Media-Erweiterung erforderlich) |
 |  Drag & Drop | Beliebig viele Dateien auf die Seite ziehen |
 |  Wiedergabeliste | Einzelne Titel per Klick abspielen, automatischer Weiterlauf, Liste mit einem Klick leeren |
 |  Zufällig /  Schleife | Zufällige oder wiederholte Wiedergabe |
@@ -75,7 +75,7 @@ Alles, was der Media-Stack des Browsers unterstützt, wird vom Dateiauswähler u
 - **Text / Daten**: TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, Logdateien und jede Erweiterung — unbekannte Dateien werden als Text geöffnet.
 - **Wiedergabelisten**: M3U, M3U8, PLS.
 
-> **Hinweis**: Der Browser kann nur wiedergeben, was er nativ unterstützt. Seltene Container wie MKV, AVI oder FLAC werden zur Wiedergabeliste hinzugefügt, können aber möglicherweise ohne Codec-Plugin nicht decodiert werden. Verwende für diese Formate die Desktop-Version von VLC. Ebenso werden Nicht-HTTP-Remote-Links (rtsp, rtmp, mms, ftp) zur Wiedergabeliste hinzugefügt, sind aber im Browser nicht streambar.
+> **Hinweis**: Der Browser kann nur wiedergeben, was er nativ unterstützt. Seltene Container wie MKV, AVI oder FLAC werden zur Wiedergabeliste hinzugefügt, können aber möglicherweise ohne Codec-Plugin nicht decodiert werden. Verwende für diese Formate die Desktop-Version von VLC. Beim direkten Ablegen wird nur `http(s)` akzeptiert — der Link wird anhand der Erweiterung seines Pfads klassifiziert und benötigt daher eine unterstützte Media-Erweiterung; andere Protokolle werden mit einer Meldung abgelehnt. Nicht-HTTP-Einträge, die *in* Wiedergabellistendateien gefunden werden, werden zur Liste hinzugefügt, sind im Browser aber nicht streambar.
 
 ## Design
 
@@ -85,12 +85,12 @@ Alles, was der Media-Stack des Browsers unterstützt, wird vom Dateiauswähler u
 
 ## Architektur
 
-Alles läuft in einem einzigen `app.js`-Classic-`<script>`, weil Browser ES-Module-`import`s auf `file://` blockieren. Eine einzige gebündelte Datei hält den Player ohne Build-Tools, ohne Abhängigkeiten und ohne Server am Laufen. Der UI-Zustand wird über ein festes `setInterval(updateState, 100)` aktualisiert, und Dateien werden über `URL.createObjectURL` geladen, wobei Object URLs beim Entladen wieder freigegeben werden.
+Alles läuft in einem einzigen `app.js`-Classic-`<script>`, weil Browser ES-Module-`import`s auf `file://` blockieren. Eine einzige gebündelte Datei hält den Player ohne Build-Tools, ohne Abhängigkeiten und ohne Server am Laufen. Der UI-Zustand wird aus Media-Events aktualisiert (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`), die Wiedergabeliste wird neu gezeichnet, wenn sich ihr Inhalt oder das aktuelle Element ändert, und Dateien werden über `URL.createObjectURL` geladen, wobei Object URLs beim Entladen wieder freigegeben werden.
 
 ## Projektstruktur
 
 ```
-VLC/
+vlc-web/
 ├── index.html   # Seitenauszeichnung + Inline-SVG-Icons
 ├── style.css    # Gestaltung (monochrome, monospace UI)
 ├── app.js       # Gesamte Player-Logik (eine Datei, keine Imports)
