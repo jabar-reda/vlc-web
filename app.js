@@ -278,6 +278,22 @@ class PlayerService {
     if (this.currentIndex === -1 && entries.length) this.loadItem(start);
   }
 
+  addUrl(url, name) {
+    const trimmed = (url || '').trim();
+    if (!/^https?:\/\//i.test(trimmed)) {
+      this.nowPlaying.innerHTML = '<span class="t">Unsupported</span> &ndash; only http/https links can be opened';
+      return false;
+    }
+    const segment = trimmed.split('/').pop();
+    let decoded = segment;
+    try { decoded = decodeURIComponent(segment); } catch {}
+    const label = name || decoded || trimmed;
+    const item = { name: label, type: classify(label), remote: true, url: trimmed };
+    this.items.push(item);
+    this.loadItem(this.items.length - 1);
+    return true;
+  }
+
   clearPlaylist() {
     this.items.forEach(item => {
       if (item.url && !item.remote) URL.revokeObjectURL(item.url);
@@ -354,10 +370,10 @@ class DragDropService {
       }
 
       const urls = dt.getData('text/uri-list') || '';
-      const first = urls.split(/\r?\n/)[0];
-      if (first && /^https?:|^rtsp:|^rtmp:|^mms:|^ftp:/.test(first)) {
+      const first = urls.split(/\r?\n/).map(line => line.trim()).find(line => line && !line.startsWith('#'));
+      if (first) {
         const name = decodeURIComponent(first.split('/').pop() || '');
-        playerService.addFiles([new File([], name, { type: 'text/uri-list' })]);
+        playerService.addUrl(first, name);
       }
     });
 
