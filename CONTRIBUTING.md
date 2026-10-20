@@ -73,7 +73,7 @@ VLC/
 | Constants | `EXT_PATTERNS` and similar module-level data |
 | Helpers | `classify`, `readM3U`, `readPLS`, `formatTime`, and other plain functions |
 | Services | `PlayerService`, `DragDropService`, `KeyboardService` |
-| Wiring | DOM lookup, event binding, and `setInterval(updateState, 100)` |
+| Wiring | DOM lookup and event binding for media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`) |
 
 **Order matters.** Helpers, constants, and classes must be defined before the wiring code that uses them. The script runs top-to-bottom, so a function referenced too early will be unavailable at runtime. Keep the structure: constants → helpers → classes → wiring.
 
@@ -110,7 +110,7 @@ Keep changes small and focused. A PR that does one thing well is far easier to r
 - **Icons are raw inline Lucide SVGs** defined as `<symbol>` elements in `index.html`.
 - Icons use `currentColor` so they inherit the theme automatically. When adding or modifying an icon, edit the inline `<symbol>` in `index.html` — do **not** add a JavaScript icon library, icon font, or external asset.
 - Keep the UI monochrome and monospace. Styling lives in `style.css`; do not introduce color themes, images, or non-monospace fonts as a normal part of the UI.
-- UI state is refreshed on a fixed `setInterval(updateState, 100)` loop. Follow this pattern rather than introducing a one-off rendering mechanism for new UI.
+- UI state updates from media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`), and `renderPlaylist()` runs only when the playlist changes (from `loadItem`, `addFiles`, `addUrl`, `clearPlaylist`). Follow this pattern rather than introducing a one-off rendering mechanism for new UI.
 
 ### Media-file and resource handling
 
@@ -133,7 +133,7 @@ There is **no automated test suite, linter, or typechecker** — the project is 
 > | Playlists | `.m3u` and `.pls` files are parsed correctly (`readM3U` / `readPLS`); entries appear in order with correct titles. |
 > | Keyboard shortcuts | All documented shortcuts work; nothing throws in the console. |
 > | Remote streams | Opening an `http`/`rtsp` stream works; `remote: true` is set; the URL is not revoked on playlist clear. |
-> | UI refresh | Time, position, and state indicators update on the 100ms `updateState` loop. |
+> | UI refresh | Time, position, and state indicators update from media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`). |
 > | Clear playlist | Clearing revokes object URLs for local files and does not error on remote ones. |
 > | Icons | Any new/edited SVG `<symbol>` renders with `currentColor` in both light and (if present) dark contexts. |
 > | `file://` from scratch | Start from a clean state by double-clicking `index.html`; nothing depends on a server or origin. |
