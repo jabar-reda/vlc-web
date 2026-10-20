@@ -177,6 +177,7 @@ class PlayerService {
   }
 
   hideAllMedia() {
+    this.video.pause();
     this.video.style.display = 'none';
     this.imageView.style.display = 'none';
     this.textView.style.display = 'none';
