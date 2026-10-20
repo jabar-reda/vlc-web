@@ -139,6 +139,7 @@ class PlayerService {
   }
 
   loadItem(index) {
+    isSeeking = false;
     if (index < 0 || index >= this.items.length) return;
     const item = this.items[index];
     this.currentIndex = index;
@@ -521,8 +522,12 @@ elements.nextBtn.addEventListener('click', () => playerService.next());
 
 let isSeeking = false;
 
-elements.seekbar.addEventListener('pointerdown', () => { isSeeking = true; });
-elements.seekbar.addEventListener('pointerup', () => { isSeeking = false; });
+elements.seekbar.addEventListener('pointerdown', (e) => {
+  isSeeking = true;
+  elements.seekbar.setPointerCapture(e.pointerId);
+});
+elements.seekbar.addEventListener('lostpointercapture', () => { isSeeking = false; });
+elements.seekbar.addEventListener('pointercancel', () => { isSeeking = false; });
 elements.seekbar.addEventListener('change', () => { isSeeking = false; });
 window.addEventListener('pointerup', () => { isSeeking = false; });
 
