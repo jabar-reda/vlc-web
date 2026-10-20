@@ -45,7 +45,7 @@ Double-click `index.html` (or open it in any browser via `file://`). No dependen
 |  Images | View PNG, JPG, GIF, WebP, SVG and more |
 |  Text & subtitles | Read TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
 |  Playlists | Open `.m3u` / `.m3u8` / `.pls` files (local and remote URLs) |
-|  Remote streams | Drop or load an HTTP(S) link and stream it directly |
+|  Remote streams | Drop or load an HTTP(S) link and stream it directly (http/https only) |
 |  Drag & drop | Drop any number of files anywhere on the page |
 |  Playlist | Click any item to play, auto-advance, clear with one button |
 |  Shuffle /  Loop | Randomized or repeated playback |
@@ -75,7 +75,7 @@ Everything the browser's media stack supports is accepted by the file picker and
 - **Text / data**: TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, log files, and any extension — unknown files open as text.
 - **Playlists**: M3U, M3U8, PLS.
 
-> **Note**: The browser can only play what it supports natively. Rare containers such as MKV, AVI or FLAC are added to the playlist but may not decode without a codec plugin. For those, use the desktop VLC application. Likewise, non-HTTP remote links (rtsp, rtmp, mms, ftp) are added to the playlist but are not streamable in the browser.
+> **Note**: The browser can only play what it supports natively. Rare containers such as MKV, AVI or FLAC are added to the playlist but may not decode without a codec plugin. For those, use the desktop VLC application. Dropping a link directly accepts `http(s)` only — other protocols are rejected with a message. Non-HTTP entries found *inside* playlist files are added to the list but cannot be streamed in the browser.
 
 ## Design
 
@@ -90,7 +90,7 @@ Everything runs from a single `app.js` classic `<script>`, because browsers bloc
 ## Project structure
 
 ```
-VLC/
+vlc-web/
 ├── index.html   # page markup + inline SVG icons
 ├── style.css    # styling (monochrome, monospace UI)
 ├── app.js       # all player logic (single file, no imports)
