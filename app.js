@@ -290,7 +290,7 @@ class PlayerService {
     }
   }
 
-  addUrl(url, name) {
+  addUrl(url) {
     const trimmed = (url || '').trim();
     if (!/^https?:\/\//i.test(trimmed)) {
       this.nowPlaying.innerHTML = '<span class="t">Unsupported</span> &ndash; only http/https links can be opened';
@@ -299,7 +299,7 @@ class PlayerService {
     let path = trimmed;
     try { path = new URL(trimmed).pathname; } catch { /* keep full URL as fallback */ }
     const base = safeDecode(path.split('/').pop() || '');
-    const label = name || base || trimmed;
+    const label = base || trimmed;
     const item = { name: label, type: classify(base || path), remote: true, url: trimmed };
     this.items.push(item);
     this.loadItem(this.items.length - 1);
@@ -385,8 +385,7 @@ class DragDropService {
       const urls = dt.getData('text/uri-list') || '';
       const first = urls.split(/\r?\n/).map(line => line.trim()).find(line => line && !line.startsWith('#'));
       if (first) {
-        const name = safeDecode(first.split('/').pop() || '');
-        playerService.addUrl(first, name);
+        playerService.addUrl(first);
       }
     });
 
