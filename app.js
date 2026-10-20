@@ -406,6 +406,7 @@ class KeyboardService {
   constructor(playerService) {
     document.addEventListener('keydown', e => {
       if (e.target.tagName === 'INPUT') return;
+      if (e.target.closest('button') && (e.key === ' ' || e.key === 'Enter')) return;
 
       switch (e.key) {
         case ' ':
