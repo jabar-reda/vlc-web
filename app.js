@@ -163,7 +163,12 @@ class PlayerService {
       this.loadTextFile(item);
     }
 
-    this.nowPlaying.innerHTML = `<span class="t">${typeLabel(item.type)}</span> &ndash; ${escapeHTML(item.name)}`;
+    this.nowPlaying.textContent = '';
+    const typeSpan = document.createElement('span');
+    typeSpan.className = 't';
+    typeSpan.textContent = typeLabel(item.type);
+    this.nowPlaying.appendChild(typeSpan);
+    this.nowPlaying.appendChild(document.createTextNode(` \u2013 ${item.name}`));
   }
 
   hideAllMedia() {
@@ -553,16 +558,22 @@ function updateMuteState() {
 }
 
 function renderPlaylist() {
-  elements.playlistEl.innerHTML = '';
+  elements.playlistEl.textContent = '';
   playerService.items.forEach((item, index) => {
     const li = document.createElement('li');
     li.dataset.index = String(index);
     li.className = index === playerService.currentIndex ? 'active' : '';
-    li.innerHTML = `
-      <span class="num">${String(index + 1).padStart(2, '0')}</span>
-      <span>${shortName(item.name)}</span>
-    `;
-    li.title = `${escapeHTML(item.name)} &ndash; ${item.type}`;
+
+    const num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = String(index + 1).padStart(2, '0');
+
+    const label = document.createElement('span');
+    label.textContent = shortName(item.name);
+
+    li.appendChild(num);
+    li.appendChild(label);
+    li.title = `${item.name} \u2013 ${item.type}`;
     li.addEventListener('click', () => playerService.loadItem(index));
     elements.playlistEl.appendChild(li);
   });
