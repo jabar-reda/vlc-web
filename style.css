@@ -33,7 +33,7 @@ body {
 }
 
 /* Header */
-header {
+.app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -66,12 +66,12 @@ header {
   display: block;
 }
 
-header .actions {
+.app-header .actions {
   display: flex;
   gap: 8px;
 }
 
-header button {
+.app-header button {
   background: none;
   border: 1px solid var(--line);
   color: var(--fg);
@@ -82,17 +82,17 @@ header button {
   transition: background 0.12s, color 0.12s, border-color 0.12s;
 }
 
-header button:hover {
+.app-header button:hover {
   border-color: var(--fg);
 }
 
-header button.primary {
+.app-header button.primary {
   background: var(--fg);
   color: var(--bg);
   border-color: var(--fg);
 }
 
-header button.primary:hover {
+.app-header button.primary:hover {
   background: var(--bg);
   color: var(--fg);
 }
@@ -291,13 +291,13 @@ main {
   display: inline-block;
 }
 
-header button .ico {
+.app-header button .ico {
   width: 14px;
   height: 14px;
   margin-inline-end: 6px;
 }
 
-aside header button .ico {
+.playlist-header button .ico {
   width: 12px;
   height: 12px;
   margin-inline-end: 4px;
@@ -420,7 +420,7 @@ aside {
   background: #0a0a0a;
 }
 
-aside header {
+.playlist-header {
   border-bottom: 1px solid var(--line);
   padding: 10px 14px;
   font-size: 12px;
@@ -431,7 +431,7 @@ aside header {
   justify-content: space-between;
 }
 
-aside header b {
+.playlist-header b {
   color: var(--fg);
 }
 
@@ -443,6 +443,7 @@ aside header b {
   font-size: 11px;
   padding: 4px 8px;
   cursor: pointer;
+  transition: border-color 0.12s;
 }
 
 #clearAll:hover {
@@ -492,14 +493,6 @@ aside header b {
 #playlist li.active .num {
   color: var(--bg);
   opacity: 0.6;
-}
-
-#playlist li.dragging {
-  opacity: 0.4;
-}
-
-#playlist li.drop-target {
-  border-top: 2px solid var(--fg);
 }
 
 /* Scrollbars */
