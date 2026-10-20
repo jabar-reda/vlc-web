@@ -173,6 +173,7 @@ class PlayerService {
     typeSpan.textContent = typeLabel(item.type);
     this.nowPlaying.appendChild(typeSpan);
     this.nowPlaying.appendChild(document.createTextNode(` \u2013 ${item.name}`));
+    renderPlaylist();
   }
 
   hideAllMedia() {
@@ -285,6 +286,7 @@ class PlayerService {
     const start = this.items.length;
     this.items = [...this.items, ...entries];
     if (this.currentIndex === -1 && entries.length) this.loadItem(start);
+    renderPlaylist();
   }
 
   addUrl(url, name) {
@@ -297,6 +299,7 @@ class PlayerService {
     const item = { name: label, type: classify(label), remote: true, url: trimmed };
     this.items.push(item);
     this.loadItem(this.items.length - 1);
+    renderPlaylist();
     return true;
   }
 
@@ -310,6 +313,7 @@ class PlayerService {
     this.stop();
     this.hideAllMedia();
     this.placeholder.style.display = 'flex';
+    renderPlaylist();
   }
 
   async loadTextFile(item) {
@@ -512,11 +516,33 @@ elements.stopBtn.addEventListener('click', () => playerService.stop());
 elements.forwardBtn.addEventListener('click', () => playerService.forward());
 elements.nextBtn.addEventListener('click', () => playerService.next());
 
+let isSeeking = false;
+
+elements.seekbar.addEventListener('pointerdown', () => { isSeeking = true; });
+elements.seekbar.addEventListener('pointerup', () => { isSeeking = false; });
+elements.seekbar.addEventListener('change', () => { isSeeking = false; });
+
 elements.seekbar.addEventListener('input', () => {
   if (elements.video.duration && !isNaN(elements.video.duration)) {
     elements.video.currentTime = parseFloat(elements.seekbar.value);
   }
 });
+
+elements.video.addEventListener('timeupdate', () => {
+  const duration = elements.video.duration;
+  if (!isFinite(duration) || duration <= 0) return;
+  elements.seekbar.max = String(duration);
+  elements.totalTime.textContent = formatTime(duration);
+  if (isSeeking) return;
+  elements.seekbar.value = String(elements.video.currentTime);
+  elements.currentTime.textContent = formatTime(elements.video.currentTime);
+});
+
+elements.video.addEventListener('loadedmetadata', syncDurationUI);
+elements.video.addEventListener('durationchange', syncDurationUI);
+elements.video.addEventListener('play', syncTransportUI);
+elements.video.addEventListener('pause', syncTransportUI);
+elements.video.addEventListener('volumechange', syncTransportUI);
 
 elements.volumeBar.addEventListener('input', () => {
   const volume = parseFloat(elements.volumeBar.value) / 100;
@@ -558,6 +584,26 @@ function updateMuteState() {
   elements.volumeBar.classList.toggle('is-muted', muted);
 }
 
+function syncDurationUI() {
+  const duration = elements.video.duration;
+  if (!isFinite(duration) || duration <= 0) return;
+  elements.seekbar.max = String(duration);
+  elements.totalTime.textContent = formatTime(duration);
+}
+
+function syncTransportUI() {
+  elements.playBtn.classList.toggle('is-playing', !elements.video.paused);
+
+  const volumePercent = Math.round(playerService.getVolume() * 100);
+  elements.volumeBar.value = String(volumePercent);
+  elements.volumeBar.style.setProperty('--vol', `${volumePercent}%`);
+  updateMuteState();
+
+  elements.fullscreenBtn.classList.toggle('is-fullscreen', !!document.fullscreenElement);
+  elements.shuffleBtn.classList.toggle('active', playerService.isShuffled);
+  elements.loopBtn.classList.toggle('active', playerService.isLooped);
+}
+
 function renderPlaylist() {
   elements.playlistEl.textContent = '';
   playerService.items.forEach((item, index) => {
@@ -580,32 +626,6 @@ function renderPlaylist() {
   });
   elements.count.textContent = String(playerService.items.length);
 }
-
-function updateState() {
-  elements.playBtn.classList.toggle('is-playing', !elements.video.paused);
-
-  if (elements.video.duration && !isNaN(elements.video.duration)) {
-    elements.seekbar.max = String(elements.video.duration);
-    elements.seekbar.value = String(elements.video.currentTime);
-    elements.currentTime.textContent = formatTime(elements.video.currentTime);
-    elements.totalTime.textContent = formatTime(elements.video.duration);
-  }
-
-  const volume = playerService.getVolume();
-  elements.volumeBar.value = String(Math.round(volume * 100));
-  elements.volumeBar.style.setProperty('--vol', `${Math.round(volume * 100)}%`);
-
-  updateMuteState();
-
-  elements.fullscreenBtn.classList.toggle('is-fullscreen', !!document.fullscreenElement);
-
-  elements.shuffleBtn.classList.toggle('active', playerService.isShuffled);
-  elements.loopBtn.classList.toggle('active', playerService.isLooped);
-
-  renderPlaylist();
-}
-
-setInterval(updateState, 100);
 
 window.addEventListener('beforeunload', () => {
   playerService.items.forEach((item) => {
