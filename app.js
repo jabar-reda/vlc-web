@@ -22,6 +22,10 @@ function extOf(name) {
   return match ? match[1].toLowerCase() : '';
 }
 
+function safeDecode(str) {
+  try { return decodeURIComponent(str); } catch { return str; }
+}
+
 function classify(name) {
   if (EXT_PATTERNS.video.test(name)) return 'video';
   if (EXT_PATTERNS.audio.test(name)) return 'audio';
@@ -67,7 +71,7 @@ function readLinesToItems(lines, baseUrl) {
     let url = line;
     if (url.startsWith('file://')) url = url.replace(/^file:\/\//, '');
 
-    const name = decodeURIComponent(url.split('/').pop() || '');
+    const name = safeDecode(url.split('/').pop() || '');
     const type = classify(name);
 
     if (/^https?:|^rtsp:|^rtmp:|^mms:|^ftp:/.test(url)) {
@@ -102,7 +106,7 @@ function readPLS(text, baseUrl) {
     let url = value;
     if (url.startsWith('file://')) url = url.replace(/^file:\/\//, '');
 
-    const name = decodeURIComponent(url.split('/').pop() || '');
+    const name = safeDecode(url.split('/').pop() || '');
     const type = classify(name);
 
     if (/^https?:|^rtsp:|^rtmp:|^mms:|^ftp:/.test(url)) {
@@ -289,10 +293,7 @@ class PlayerService {
       this.nowPlaying.innerHTML = '<span class="t">Unsupported</span> &ndash; only http/https links can be opened';
       return false;
     }
-    const segment = trimmed.split('/').pop();
-    let decoded = segment;
-    try { decoded = decodeURIComponent(segment); } catch {}
-    const label = name || decoded || trimmed;
+    const label = name || safeDecode(trimmed.split('/').pop()) || trimmed;
     const item = { name: label, type: classify(label), remote: true, url: trimmed };
     this.items.push(item);
     this.loadItem(this.items.length - 1);
@@ -377,7 +378,7 @@ class DragDropService {
       const urls = dt.getData('text/uri-list') || '';
       const first = urls.split(/\r?\n/).map(line => line.trim()).find(line => line && !line.startsWith('#'));
       if (first) {
-        const name = decodeURIComponent(first.split('/').pop() || '');
+        const name = safeDecode(first.split('/').pop() || '');
         playerService.addUrl(first, name);
       }
     });
