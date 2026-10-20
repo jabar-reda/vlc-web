@@ -85,7 +85,7 @@ Everything the browser's media stack supports is accepted by the file picker and
 
 ## Architecture
 
-Everything runs from a single `app.js` classic `<script>`, because browsers block ES module `import`s on `file://`. One bundled file keeps the player working with zero build tools, zero dependencies and no server. UI state is updated from media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`), the playlist re-renders only when it changes, and files are loaded through `URL.createObjectURL` with object URLs revoked on unload.
+Everything runs from a single `app.js` classic `<script>`, because browsers block ES module `import`s on `file://`. One bundled file keeps the player working with zero build tools, zero dependencies and no server. UI state is updated from media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`), the playlist re-renders when its contents or the current item change, and files are loaded through `URL.createObjectURL` with object URLs revoked on unload.
 
 ## Project structure
 

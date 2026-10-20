@@ -31,7 +31,7 @@ If a proposed change can only work when served over HTTP, it does not belong in 
 
 ```sh
 git clone https://github.com/jabar-reda/vlc-web.git
-cd VLC-Web
+cd vlc-web
 ```
 
 ### Open the app locally
@@ -55,7 +55,7 @@ The app runs entirely from the local file system. You do not need a web server, 
 ## Project structure
 
 ```
-VLC/
+vlc-web/
 ├── index.html        # Page markup + inline SVG icons (<symbol> elements using currentColor)
 ├── style.css         # All styling — monochrome, monospace UI
 ├── app.js            # The entire application (see below)
@@ -115,7 +115,7 @@ Keep changes small and focused. A PR that does one thing well is far easier to r
 ### Media-file and resource handling
 
 - Locally dropped or opened files are loaded via `URL.createObjectURL`. These object URLs must be revoked (`URL.revokeObjectURL`) on unload and when the playlist is cleared, to avoid memory leaks.
-- Remote URLs (`http`, `rtsp`, and similar) must be flagged with `remote: true` and are **never** revoked.
+- Remote URLs — playlist entries (`http`, `rtsp`, and similar) or dropped `http(s)` links — must be flagged with `remote: true` and are **never** revoked.
 - Any new path that handles local files must respect this revoke/never-revoke split.
 
 ---
