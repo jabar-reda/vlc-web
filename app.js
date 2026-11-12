@@ -202,9 +202,13 @@ class PlayerService {
   stop() {
     this.video.pause();
     this.video.currentTime = 0;
+    this.isPlaying = false;
+  }
+
+  unload() {
+    this.stop();
     this.video.removeAttribute('src');
     this.video.load();
-    this.isPlaying = false;
   }
 
   randomIndex() {
@@ -322,7 +326,7 @@ class PlayerService {
     this.items = [];
     this.currentIndex = -1;
     this.nowPlaying.textContent = 'No file loaded';
-    this.stop();
+    this.unload();
     this.hideAllMedia();
     this.placeholder.style.display = 'flex';
     renderPlaylist();
