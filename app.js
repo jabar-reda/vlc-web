@@ -57,6 +57,14 @@ function isSupportedSource(url) {
   return /^https?:\/\//i.test(url);
 }
 
+function srtToVtt(text) {
+  const body = text
+    .replace(/^\uFEFF/, '')
+    .replace(/\r\n?/g, '\n')
+    .replace(/(\d{1,2}:\d{2}:\d{2}),(\d{3})/g, '$1.$2');
+  return `WEBVTT\n\n${body}`;
+}
+
 function entryName(url) {
   try {
     const path = new URL(url).pathname;
@@ -139,6 +147,8 @@ class PlayerService {
     this.isShuffled = false;
     this.isLooped = false;
     this.uiState = uiState;
+    this.subtitleUrl = null;
+    this.subtitleTrack = null;
 
     this.video = elements.video;
     this.imageView = elements.imageView;
@@ -168,6 +178,7 @@ class PlayerService {
     const item = this.items[index];
     this.currentIndex = index;
 
+    this.clearSubtitle();
     hideStatus();
     this.hideAllMedia();
 
@@ -238,8 +249,54 @@ class PlayerService {
 
   unload() {
     this.stop();
+    this.clearSubtitle();
     this.video.removeAttribute('src');
     this.video.load();
+  }
+
+  async attachSubtitle(file) {
+    this.clearSubtitle();
+
+    const name = file.name.toLowerCase();
+    const isVtt = name.endsWith('.vtt');
+    if (!isVtt && !name.endsWith('.srt')) {
+      showStatus({
+        title: 'Subtitle format not supported',
+        detail: 'Only .vtt and .srt subtitle files can be attached.',
+      });
+      return;
+    }
+
+    try {
+      const blob = isVtt ? file : new Blob([srtToVtt(await file.text())], { type: 'text/vtt' });
+      this.subtitleUrl = URL.createObjectURL(blob);
+
+      const track = document.createElement('track');
+      track.kind = 'subtitles';
+      track.label = file.name;
+      track.srclang = 'und';
+      track.default = true;
+      track.src = this.subtitleUrl;
+      this.video.appendChild(track);
+      this.subtitleTrack = track;
+      track.track.mode = 'showing';
+    } catch (e) {
+      showStatus({
+        title: 'Could not read the subtitle file',
+        detail: `${file.name} could not be loaded.`,
+      });
+    }
+  }
+
+  clearSubtitle() {
+    if (this.subtitleTrack) {
+      this.subtitleTrack.remove();
+      this.subtitleTrack = null;
+    }
+    if (this.subtitleUrl) {
+      URL.revokeObjectURL(this.subtitleUrl);
+      this.subtitleUrl = null;
+    }
   }
 
   randomIndex() {
@@ -307,10 +364,15 @@ class PlayerService {
 
   async addFiles(files) {
     const entries = [];
+    const subtitleFiles = [];
     let skipped = 0;
 
     for (const file of Array.from(files)) {
       const type = classify(file.name);
+      if (type === 'sub') {
+        subtitleFiles.push(file);
+        continue;
+      }
       if (type === 'playlist') {
         try {
           const text = await file.text();
@@ -347,6 +409,18 @@ class PlayerService {
         title: 'Some entries were skipped',
         detail: `${skipped} entries were skipped because only http and https links can be played.`,
       });
+    }
+
+    if (subtitleFiles.length) {
+      const current = this.items[this.currentIndex];
+      if (current && current.type === 'video') {
+        await this.attachSubtitle(subtitleFiles[0]);
+      } else {
+        showStatus({
+          title: 'Open a video first',
+          detail: 'A subtitle file attaches to the video that is playing.',
+        });
+      }
     }
   }
 
@@ -863,6 +937,7 @@ function renderPlaylist() {
 }
 
 window.addEventListener('beforeunload', () => {
+  playerService.clearSubtitle();
   playerService.items.forEach((item) => {
     if (item.url && !item.remote) {
       URL.revokeObjectURL(item.url);
