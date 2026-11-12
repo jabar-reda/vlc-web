@@ -546,6 +546,7 @@ elements.seekbar.addEventListener('input', () => {
   if (elements.video.duration && !isNaN(elements.video.duration)) {
     elements.video.currentTime = parseFloat(elements.seekbar.value);
   }
+  syncSeekProgress();
 });
 
 elements.video.addEventListener('timeupdate', () => {
@@ -553,6 +554,7 @@ elements.video.addEventListener('timeupdate', () => {
   if (isSeeking || elements.seekbar.disabled) return;
   elements.seekbar.value = String(elements.video.currentTime);
   elements.currentTime.textContent = formatTime(elements.video.currentTime);
+  syncSeekProgress();
 });
 
 elements.video.addEventListener('loadedmetadata', syncDurationUI);
@@ -612,10 +614,19 @@ function syncDurationUI() {
   elements.seekbar.disabled = !isKnown;
   if (!isKnown) {
     elements.totalTime.textContent = '--:--';
+    elements.seekbar.style.setProperty('--progress', '0%');
     return;
   }
   elements.seekbar.max = String(duration);
   elements.totalTime.textContent = formatTime(duration);
+  syncSeekProgress();
+}
+
+function syncSeekProgress() {
+  const max = parseFloat(elements.seekbar.max);
+  const value = parseFloat(elements.seekbar.value);
+  const percent = max > 0 && isFinite(value) ? (value / max) * 100 : 0;
+  elements.seekbar.style.setProperty('--progress', `${percent}%`);
 }
 
 function syncTransportUI() {
@@ -643,10 +654,16 @@ function renderPlaylist() {
     num.textContent = String(index + 1).padStart(2, '0');
 
     const label = document.createElement('span');
+    label.className = 'label';
     label.textContent = shortName(item.name);
+
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = typeLabel(item.type);
 
     li.appendChild(num);
     li.appendChild(label);
+    li.appendChild(tag);
     li.title = `${item.name} \u2013 ${item.type}`;
     li.addEventListener('click', () => playerService.loadItem(index));
     elements.playlistEl.appendChild(li);

@@ -88,16 +88,18 @@
   <div id="app">
     <header class="app-header">
       <div class="logo">
-        <span class="icon"><img src="./assets/vlc512x512.png" alt="VLC"></span>
-        <span>VLC&nbsp;WEB</span>
+        <span class="mark"><img src="./assets/vlc512x512.png" alt=""></span>
+        <span class="wordmark">VLC&nbsp;WEB</span>
       </div>
       <div class="actions">
         <button id="openBtn" class="primary">
-          <svg class="ico"><use href="#i-folder-open"/></svg>Open files
+          <svg class="ico" aria-hidden="true"><use href="#i-folder-open"/></svg>
+          <span class="btn-text">Open files</span>
         </button>
-        <button id="fullscreenBtn">
-          <svg class="ico ico-max"><use href="#i-maximize"/></svg>
-          <svg class="ico ico-min"><use href="#i-minimize"/></svg>Fullscreen
+        <button id="fullscreenBtn" title="Fullscreen (F)" aria-label="Toggle fullscreen">
+          <svg class="ico ico-max" aria-hidden="true"><use href="#i-maximize"/></svg>
+          <svg class="ico ico-min" aria-hidden="true"><use href="#i-minimize"/></svg>
+          <span class="btn-text">Fullscreen</span>
         </button>
         <input type="file" id="fileInput" multiple hidden>
       </div>
@@ -107,62 +109,77 @@
       <section class="stage">
         <div id="dropzone">
           <div class="placeholder">
-            <div class="big">VLC / WEB</div>
-            Drag and drop files here, or click "Open files"<br>
-            Supports video &middot; audio &middot; images &middot; text &middot; subtitles &middot; playlists
+            <div class="drop-body">
+              <p class="drop-title">VLC / WEB</p>
+              <p class="drop-copy">Drop files here, or <span class="kbd">Open files</span></p>
+              <ul class="formats">
+                <li>Video</li>
+                <li>Audio</li>
+                <li>Image</li>
+                <li>Text</li>
+                <li>Subtitles</li>
+                <li>Playlists</li>
+              </ul>
+            </div>
           </div>
           <video id="video" playsinline controlslist="nodownload nofullscreen"></video>
           <img id="imageView" alt="">
           <pre id="textView"></pre>
         </div>
         <div id="controls">
-          <div id="nowPlaying">No file loaded</div>
+          <p id="nowPlaying" class="now-playing">No file loaded</p>
           <div class="seekRow">
-            <span class="time" id="currentTime">00:00</span>
-            <input type="range" id="seekbar" min="0" max="100" value="0" step="0.1">
-            <span class="time" id="totalTime">00:00</span>
+            <span class="time time-current" id="currentTime">00:00</span>
+            <input type="range" id="seekbar" min="0" max="100" value="0" step="0.1" aria-label="Seek">
+            <span class="time time-total" id="totalTime">00:00</span>
           </div>
           <div class="buttons">
-            <button id="prevBtn" title="Previous">
-              <svg class="ico"><use href="#i-skip-back"/></svg>
-            </button>
-            <button id="rewindBtn" title="Rewind 10s">
-              <svg class="ico"><use href="#i-rotate-ccw"/></svg>
-            </button>
-            <button id="playBtn" title="Play / Pause" class="active">
-              <svg class="ico ico-play"><use href="#i-play"/></svg>
-              <svg class="ico ico-pause"><use href="#i-pause"/></svg>
-            </button>
-            <button id="stopBtn" title="Stop">
-              <svg class="ico"><use href="#i-square"/></svg>
-            </button>
-            <button id="forwardBtn" title="Forward 10s">
-              <svg class="ico"><use href="#i-rotate-cw"/></svg>
-            </button>
-            <button id="nextBtn" title="Next">
-              <svg class="ico"><use href="#i-skip-forward"/></svg>
-            </button>
-            <span class="spacer"></span>
-            <button id="volumeBtn" title="Mute">
-              <svg class="ico ico-vol-on"><use href="#i-volume-2"/></svg>
-              <svg class="ico ico-vol-off"><use href="#i-volume-x"/></svg>
-            </button>
-            <input type="range" id="volumeBar" min="0" max="100" value="100" title="Volume">
-            <button id="shuffleBtn" title="Shuffle">
-              <svg class="ico"><use href="#i-shuffle"/></svg>
-            </button>
-            <button id="loopBtn" title="Loop">
-              <svg class="ico"><use href="#i-repeat"/></svg>
-            </button>
+            <div class="transport">
+              <button id="prevBtn" title="Previous (P)" aria-label="Previous">
+                <svg class="ico" aria-hidden="true"><use href="#i-skip-back"/></svg>
+              </button>
+              <button id="rewindBtn" title="Rewind 10s" aria-label="Rewind 10 seconds">
+                <svg class="ico" aria-hidden="true"><use href="#i-rotate-ccw"/></svg>
+              </button>
+              <button id="playBtn" title="Play / Pause (Space)" aria-label="Play or pause">
+                <svg class="ico ico-play" aria-hidden="true"><use href="#i-play"/></svg>
+                <svg class="ico ico-pause" aria-hidden="true"><use href="#i-pause"/></svg>
+              </button>
+              <button id="stopBtn" title="Stop (S)" aria-label="Stop">
+                <svg class="ico" aria-hidden="true"><use href="#i-square"/></svg>
+              </button>
+              <button id="forwardBtn" title="Forward 10s" aria-label="Forward 10 seconds">
+                <svg class="ico" aria-hidden="true"><use href="#i-rotate-cw"/></svg>
+              </button>
+              <button id="nextBtn" title="Next (N)" aria-label="Next">
+                <svg class="ico" aria-hidden="true"><use href="#i-skip-forward"/></svg>
+              </button>
+            </div>
+            <div class="modes">
+              <button id="shuffleBtn" title="Shuffle" aria-label="Shuffle">
+                <svg class="ico" aria-hidden="true"><use href="#i-shuffle"/></svg>
+              </button>
+              <button id="loopBtn" title="Loop" aria-label="Loop">
+                <svg class="ico" aria-hidden="true"><use href="#i-repeat"/></svg>
+              </button>
+            </div>
+            <div class="volume">
+              <button id="volumeBtn" title="Mute (M)" aria-label="Mute">
+                <svg class="ico ico-vol-on" aria-hidden="true"><use href="#i-volume-2"/></svg>
+                <svg class="ico ico-vol-off" aria-hidden="true"><use href="#i-volume-x"/></svg>
+              </button>
+              <input type="range" id="volumeBar" min="0" max="100" value="100" aria-label="Volume">
+            </div>
           </div>
         </div>
       </section>
 
       <aside>
         <header class="playlist-header">
-          <span>Playlist <b id="count">0</b></span>
-          <button id="clearAll">
-            <svg class="ico"><use href="#i-trash-2"/></svg>Clear
+          <span class="playlist-title">Playlist <b id="count">0</b></span>
+          <button id="clearAll" title="Clear playlist" aria-label="Clear playlist">
+            <svg class="ico" aria-hidden="true"><use href="#i-trash-2"/></svg>
+            <span class="btn-text">Clear</span>
           </button>
         </header>
         <ul id="playlist"></ul>
