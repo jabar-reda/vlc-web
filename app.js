@@ -143,6 +143,76 @@ function readPLS(text) {
   return { entries, skipped };
 }
 
+const STORAGE_VOLUME_KEY = 'vlcweb.volume';
+const STORAGE_POSITIONS_KEY = 'vlcweb.positions';
+const MAX_SAVED_POSITIONS = 50;
+const RESUME_MIN_SECONDS = 3;
+const RESUME_END_MARGIN = 5;
+
+function readStorage(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function writeStorage(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    /* storage is unavailable on some file:// origins and in private mode */
+  }
+}
+
+function itemKey(item) {
+  if (item.remote) return item.url;
+  if (item.file) return `${item.file.name}|${item.file.size}|${item.file.lastModified}`;
+  return item.url;
+}
+
+function readSavedPositions() {
+  try {
+    const parsed = JSON.parse(readStorage(STORAGE_POSITIONS_KEY) || '{}');
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function savePosition(item, seconds) {
+  const positions = readSavedPositions();
+  const key = itemKey(item);
+  delete positions[key];
+  positions[key] = seconds;
+
+  const keys = Object.keys(positions);
+  for (const staleKey of keys.slice(0, Math.max(0, keys.length - MAX_SAVED_POSITIONS))) {
+    delete positions[staleKey];
+  }
+  writeStorage(STORAGE_POSITIONS_KEY, JSON.stringify(positions));
+}
+
+function removeSavedPosition(item) {
+  const positions = readSavedPositions();
+  const key = itemKey(item);
+  if (!(key in positions)) return;
+  delete positions[key];
+  writeStorage(STORAGE_POSITIONS_KEY, JSON.stringify(positions));
+}
+
+function readSavedVolume() {
+  const raw = readStorage(STORAGE_VOLUME_KEY);
+  if (raw === null) return null;
+  const value = parseFloat(raw);
+  if (!isFinite(value)) return null;
+  return Math.max(0, Math.min(100, value));
+}
+
+function saveVolume(percent) {
+  writeStorage(STORAGE_VOLUME_KEY, String(Math.round(percent)));
+}
+
 const uiState = {
   isSeeking: false,
 };
@@ -183,6 +253,8 @@ class PlayerService {
   loadItem(index) {
     this.uiState.isSeeking = false;
     if (index < 0 || index >= this.items.length) return;
+    this.saveCurrentPosition();
+
     const item = this.items[index];
     this.currentIndex = index;
 
@@ -305,6 +377,26 @@ class PlayerService {
       URL.revokeObjectURL(this.subtitleUrl);
       this.subtitleUrl = null;
     }
+  }
+
+  saveCurrentPosition() {
+    const item = this.items[this.currentIndex];
+    if (!item || (item.type !== 'video' && item.type !== 'audio')) return;
+    const time = this.video.currentTime;
+    if (!isFinite(time) || time < 1) return;
+    const duration = this.video.duration;
+    if (isFinite(duration) && duration - time < RESUME_END_MARGIN) return;
+    savePosition(item, Math.floor(time));
+  }
+
+  restorePosition() {
+    const item = this.items[this.currentIndex];
+    if (!item || (item.type !== 'video' && item.type !== 'audio')) return;
+    const saved = readSavedPositions()[itemKey(item)];
+    if (!isFinite(saved) || saved < RESUME_MIN_SECONDS) return;
+    const duration = this.video.duration;
+    if (!isFinite(duration) || saved > duration - RESUME_END_MARGIN) return;
+    this.video.currentTime = saved;
   }
 
   randomIndex() {
@@ -473,6 +565,9 @@ class PlayerService {
   }
 
   handleEnded() {
+    const item = this.items[this.currentIndex];
+    if (item) removeSavedPosition(item);
+
     if (this.loopMode === 'one') {
       this.video.currentTime = 0;
       this.video.play().catch(() => {});
@@ -724,6 +819,11 @@ const playerService = new PlayerService({
   totalTime: elements.totalTime,
 }, uiState);
 
+const savedVolume = readSavedVolume();
+if (savedVolume !== null) {
+  playerService.setVolume(savedVolume / 100);
+}
+
 const appEl = document.getElementById('app');
 const dragDropService = new DragDropService(elements.dropzone, playerService, appEl);
 const keyboardService = new KeyboardService(playerService);
@@ -803,19 +903,32 @@ elements.seekbar.addEventListener('input', () => {
   syncSeekProgress();
 });
 
+let positionTick = 0;
+
 elements.video.addEventListener('timeupdate', () => {
   syncDurationUI();
+  positionTick += 1;
+  if (positionTick % 20 === 0) playerService.saveCurrentPosition();
   if (uiState.isSeeking || elements.seekbar.disabled) return;
   elements.seekbar.value = String(elements.video.currentTime);
   elements.currentTime.textContent = formatTime(elements.video.currentTime);
   syncSeekProgress();
 });
 
-elements.video.addEventListener('loadedmetadata', syncDurationUI);
+elements.video.addEventListener('loadedmetadata', () => {
+  syncDurationUI();
+  playerService.restorePosition();
+});
 elements.video.addEventListener('durationchange', syncDurationUI);
 elements.video.addEventListener('play', syncTransportUI);
-elements.video.addEventListener('pause', syncTransportUI);
-elements.video.addEventListener('volumechange', syncTransportUI);
+elements.video.addEventListener('pause', () => {
+  syncTransportUI();
+  playerService.saveCurrentPosition();
+});
+elements.video.addEventListener('volumechange', () => {
+  syncTransportUI();
+  saveVolume(elements.video.volume * 100);
+});
 
 elements.volumeBar.addEventListener('input', () => {
   const volume = parseFloat(elements.volumeBar.value) / 100;
@@ -960,6 +1073,8 @@ function renderPlaylist() {
 }
 
 window.addEventListener('beforeunload', () => {
+  playerService.saveCurrentPosition();
+  saveVolume(elements.video.volume * 100);
   playerService.clearSubtitle();
   playerService.items.forEach((item) => {
     if (item.url && !item.remote) {
@@ -967,3 +1082,5 @@ window.addEventListener('beforeunload', () => {
     }
   });
 });
+
+syncTransportUI();
