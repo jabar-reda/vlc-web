@@ -139,6 +139,7 @@ class PlayerService {
     this.video.addEventListener('pause', () => this.isPlaying = false);
     this.video.addEventListener('ended', () => this.handleEnded());
     this.video.addEventListener('error', () => this.handleError());
+    this.imageView.addEventListener('error', () => this.handleImageError());
   }
 
   loadItem(index) {
@@ -147,6 +148,7 @@ class PlayerService {
     const item = this.items[index];
     this.currentIndex = index;
 
+    hideStatus();
     this.hideAllMedia();
 
     if (item.type === 'video' || item.type === 'audio') {
@@ -306,7 +308,10 @@ class PlayerService {
   addUrl(url) {
     const trimmed = (url || '').trim();
     if (!/^https?:\/\//i.test(trimmed)) {
-      this.nowPlaying.innerHTML = '<span class="t">Unsupported</span> &ndash; only http/https links can be opened';
+      showStatus({
+        title: 'Link not supported',
+        detail: 'Only http and https links can be opened.',
+      });
       return false;
     }
     let path = trimmed;
@@ -328,6 +333,7 @@ class PlayerService {
     this.nowPlaying.textContent = 'No file loaded';
     this.unload();
     this.hideAllMedia();
+    hideStatus();
     this.placeholder.style.display = 'flex';
     renderPlaylist();
   }
@@ -352,9 +358,22 @@ class PlayerService {
 
   handleError() {
     const item = this.items[this.currentIndex];
-    if (item && (item.type === 'video' || item.type === 'audio') && !item.remote) {
-      this.nowPlaying.innerHTML = '<span class="t">Failed</span> &ndash; format not playable, try another file';
-    }
+    if (!item || (item.type !== 'video' && item.type !== 'audio')) return;
+    const hasNext = this.items.length > 1;
+    showStatus({
+      title: 'This file cannot be played',
+      detail: `${item.name} uses a format this browser cannot decode.`,
+      actionLabel: hasNext ? 'Play next item' : '',
+      onAction: hasNext ? () => this.next() : null,
+    });
+  }
+
+  handleImageError() {
+    if (!this.imageView.getAttribute('src')) return;
+    showStatus({
+      title: 'This image cannot be shown',
+      detail: 'The file may be corrupted or use a format the browser cannot display.',
+    });
   }
 }
 
@@ -532,6 +551,10 @@ const elements = {
   nowPlaying: document.getElementById('nowPlaying'),
   currentTime: document.getElementById('currentTime'),
   totalTime: document.getElementById('totalTime'),
+  status: document.getElementById('status'),
+  statusTitle: document.getElementById('statusTitle'),
+  statusDetail: document.getElementById('statusDetail'),
+  statusAction: document.getElementById('statusAction'),
   count: document.getElementById('count'),
   playBtn: document.getElementById('playBtn'),
   volumeBtn: document.getElementById('volumeBtn'),
@@ -657,6 +680,22 @@ function updateMuteState() {
   const muted = playerService.getIsMuted();
   elements.volumeBtn.classList.toggle('is-muted', muted);
   elements.volumeBar.classList.toggle('is-muted', muted);
+}
+
+function showStatus({ title, detail = '', actionLabel = '', onAction = null, tone = 'error' }) {
+  elements.status.hidden = false;
+  elements.status.dataset.tone = tone;
+  elements.statusTitle.textContent = title;
+  elements.statusDetail.textContent = detail;
+  elements.statusDetail.hidden = !detail;
+  elements.statusAction.hidden = !actionLabel;
+  elements.statusAction.textContent = actionLabel;
+  elements.statusAction.onclick = actionLabel && onAction ? onAction : null;
+}
+
+function hideStatus() {
+  elements.status.hidden = true;
+  elements.statusAction.onclick = null;
 }
 
 function syncDurationUI() {
