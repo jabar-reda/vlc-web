@@ -53,65 +53,78 @@ function formatTime(sec) {
     : `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
-function readLinesToItems(lines, baseUrl) {
-  const entries = [];
-  for (const raw of lines) {
-    const line = raw.trim();
-    if (!line || line.startsWith('#')) continue;
+function isSupportedSource(url) {
+  return /^https?:\/\//i.test(url);
+}
 
-    let url = line;
-    if (url.startsWith('file://')) url = url.replace(/^file:\/\//, '');
-
-    const name = safeDecode(url.split('/').pop() || '');
-    const type = classify(name);
-
-    if (/^https?:|^rtsp:|^rtmp:|^mms:|^ftp:/.test(url)) {
-      entries.push({ name, type, remote: true, url });
-    } else {
-      try {
-        const base = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
-        entries.push({ name, type, remote: false, url: new URL(url, base).href });
-      } catch {
-        entries.push({ name, type, remote: false, url });
-      }
-    }
+function entryName(url) {
+  try {
+    const path = new URL(url).pathname;
+    return safeDecode(path.split('/').pop() || '') || url;
+  } catch {
+    return url;
   }
-  return entries;
 }
 
-function readM3U(text, baseUrl, baseName) {
-  return readLinesToItems(text.split(/\r?\n/), baseUrl);
+function buildEntry(url, title = '') {
+  const fileName = entryName(url);
+  return {
+    name: title || fileName,
+    type: classify(fileName),
+    remote: true,
+    url,
+  };
 }
 
-function readPLS(text, baseUrl) {
+function readM3U(text) {
   const entries = [];
-  const lines = text.split(/\r?\n/);
+  let skipped = 0;
+  let pendingTitle = '';
 
-  for (const raw of lines) {
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line) continue;
+
+    if (line.startsWith('#EXTINF:')) {
+      const comma = line.indexOf(',');
+      pendingTitle = comma >= 0 ? line.slice(comma + 1).trim() : '';
+      continue;
+    }
+    if (line.startsWith('#')) continue;
+
+    if (!isSupportedSource(line)) {
+      skipped += 1;
+      pendingTitle = '';
+      continue;
+    }
+
+    entries.push(buildEntry(line, pendingTitle));
+    pendingTitle = '';
+  }
+
+  return { entries, skipped };
+}
+
+function readPLS(text) {
+  const entries = [];
+  let skipped = 0;
+
+  for (const raw of text.split(/\r?\n/)) {
     const line = raw.trim();
     if (!/^file\d*\s*=/i.test(line)) continue;
 
-    const value = line.replace(/^file\d*\s*=\s*/i, '').trim();
-    if (!value) continue;
+    const url = line.replace(/^file\d*\s*=\s*/i, '').trim();
+    if (!url) continue;
 
-    let url = value;
-    if (url.startsWith('file://')) url = url.replace(/^file:\/\//, '');
-
-    const name = safeDecode(url.split('/').pop() || '');
-    const type = classify(name);
-
-    if (/^https?:|^rtsp:|^rtmp:|^mms:|^ftp:/.test(url)) {
-      entries.push({ name, type, remote: true, url });
-    } else {
-      try {
-        const base = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
-        entries.push({ name, type, remote: false, url: new URL(url, base).href });
-      } catch {
-        entries.push({ name, type, remote: false, url });
-      }
+    if (!isSupportedSource(url)) {
+      skipped += 1;
+      continue;
     }
+
+    entries.push(buildEntry(url));
   }
-  return entries;
+
+  return { entries, skipped };
 }
 
 class PlayerService {
@@ -278,16 +291,23 @@ class PlayerService {
 
   async addFiles(files) {
     const entries = [];
+    let skipped = 0;
+
     for (const file of Array.from(files)) {
       const type = classify(file.name);
       if (type === 'playlist') {
         try {
           const text = await file.text();
-          const base = URL.createObjectURL(file).replace(/[^/]*$/, '');
-          const parsed = file.name.toLowerCase().endsWith('.pls') ? readPLS(text, base) : readM3U(text, base, file.name);
-          entries.push(...parsed);
-          continue;
-        } catch (e) { console.error('Error parsing playlist:', e); }
+          const parsed = file.name.toLowerCase().endsWith('.pls') ? readPLS(text) : readM3U(text);
+          entries.push(...parsed.entries);
+          skipped += parsed.skipped;
+        } catch (e) {
+          showStatus({
+            title: 'Could not read the playlist',
+            detail: `${file.name} could not be parsed.`,
+          });
+        }
+        continue;
       }
       entries.push({
         name: file.name,
@@ -296,6 +316,7 @@ class PlayerService {
         file
       });
     }
+
     const start = this.items.length;
     this.items = [...this.items, ...entries];
     if (this.currentIndex === -1 && entries.length) {
@@ -303,22 +324,27 @@ class PlayerService {
     } else if (entries.length) {
       renderPlaylist();
     }
+
+    if (skipped > 0) {
+      showStatus({
+        tone: 'notice',
+        title: 'Some entries were skipped',
+        detail: `${skipped} entries were skipped because only http and https links can be played.`,
+      });
+    }
   }
 
   addUrl(url) {
     const trimmed = (url || '').trim();
-    if (!/^https?:\/\//i.test(trimmed)) {
+    if (!isSupportedSource(trimmed)) {
       showStatus({
         title: 'Link not supported',
         detail: 'Only http and https links can be opened.',
       });
       return false;
     }
-    let path = trimmed;
-    try { path = new URL(trimmed).pathname; } catch { /* keep full URL as fallback */ }
-    const base = safeDecode(path.split('/').pop() || '');
-    const label = base || trimmed;
-    const item = { name: label, type: classify(base || path), remote: true, url: trimmed };
+    const fileName = entryName(trimmed);
+    const item = { name: fileName, type: classify(fileName), remote: true, url: trimmed };
     this.items.push(item);
     this.loadItem(this.items.length - 1);
     return true;
