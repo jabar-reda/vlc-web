@@ -25,6 +25,9 @@ const LOOP_LABELS = {
   all: 'Loop all',
 };
 
+// Mirrors the 46rem breakpoint in style.css.
+const RAIL_MEDIA_QUERY = '(max-width: 46rem)';
+
 function extOf(name) {
   const match = name.match(/\.([a-z0-9]{1,8})$/i);
   return match ? match[1].toLowerCase() : '';
@@ -793,6 +796,7 @@ const elements = {
   loopBtn: document.getElementById('loopBtn'),
   fileInput: document.getElementById('fileInput'),
   openBtn: document.getElementById('openBtn'),
+  railToggle: document.getElementById('railToggle'),
   addLinkBtn: document.getElementById('addLinkBtn'),
   linkForm: document.getElementById('linkForm'),
   linkInput: document.getElementById('linkInput'),
@@ -827,6 +831,15 @@ if (savedVolume !== null) {
 const appEl = document.getElementById('app');
 const dragDropService = new DragDropService(elements.dropzone, playerService, appEl);
 const keyboardService = new KeyboardService(playerService);
+
+function setRailCollapsed(isCollapsed) {
+  appEl.classList.toggle('rail-collapsed', isCollapsed);
+  elements.railToggle.setAttribute('aria-expanded', String(!isCollapsed));
+}
+
+elements.railToggle.addEventListener('click', () => {
+  setRailCollapsed(!appEl.classList.contains('rail-collapsed'));
+});
 
 elements.openBtn.addEventListener('click', () => elements.fileInput.click());
 
@@ -1065,7 +1078,10 @@ function renderPlaylist() {
     row.appendChild(num);
     row.appendChild(label);
     row.appendChild(tag);
-    row.addEventListener('click', () => playerService.loadItem(index));
+    row.addEventListener('click', () => {
+      playerService.loadItem(index);
+      if (window.matchMedia(RAIL_MEDIA_QUERY).matches) setRailCollapsed(true);
+    });
     li.appendChild(row);
     elements.playlistEl.appendChild(li);
   });

@@ -149,6 +149,10 @@ button:disabled {
   height: 0.875rem;
 }
 
+.app-header .rail-toggle {
+  display: none;
+}
+
 /* Link form */
 
 .link-form {
@@ -1004,6 +1008,14 @@ aside {
     border-top: 1px solid var(--line);
   }
 
+  #app.rail-collapsed aside {
+    display: none;
+  }
+
+  .app-header .rail-toggle {
+    display: inline-flex;
+  }
+
   .app-header {
     padding-inline: 0.8rem;
   }
@@ -1069,5 +1081,11 @@ aside {
 
   .formats li {
     font-size: 0.625rem;
+  }
+}
+
+@media (max-width: 22rem) {
+  #addLinkBtn .btn-text {
+    display: none;
   }
 }
