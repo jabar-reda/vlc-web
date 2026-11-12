@@ -749,6 +749,18 @@ main {
   display: block;
 }
 
+#loopBtn .ico-loop-one {
+  display: none;
+}
+
+#loopBtn[data-mode="one"] .ico-loop {
+  display: none;
+}
+
+#loopBtn[data-mode="one"] .ico-loop-one {
+  display: block;
+}
+
 /* Volume */
 
 #volumeBar {

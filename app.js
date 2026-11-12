@@ -17,6 +17,14 @@ const TYPE_LABELS = {
   playlist: 'Playlist',
 };
 
+const LOOP_MODES = ['off', 'one', 'all'];
+
+const LOOP_LABELS = {
+  off: 'Loop off',
+  one: 'Loop one',
+  all: 'Loop all',
+};
+
 function extOf(name) {
   const match = name.match(/\.([a-z0-9]{1,8})$/i);
   return match ? match[1].toLowerCase() : '';
@@ -145,7 +153,7 @@ class PlayerService {
     this.currentIndex = -1;
     this.isPlaying = false;
     this.isShuffled = false;
-    this.isLooped = false;
+    this.loopMode = 'off';
     this.uiState = uiState;
     this.subtitleUrl = null;
     this.subtitleTrack = null;
@@ -341,8 +349,9 @@ class PlayerService {
     this.isShuffled = !this.isShuffled;
   }
 
-  toggleLoop() {
-    this.isLooped = !this.isLooped;
+  cycleLoop() {
+    const nextMode = LOOP_MODES[(LOOP_MODES.indexOf(this.loopMode) + 1) % LOOP_MODES.length];
+    this.loopMode = nextMode;
   }
 
   toggleMute() {
@@ -464,12 +473,20 @@ class PlayerService {
   }
 
   handleEnded() {
-    if (this.isLooped) {
+    if (this.loopMode === 'one') {
       this.video.currentTime = 0;
       this.video.play().catch(() => {});
-    } else {
-      this.next();
+      return;
     }
+
+    const isLast = this.currentIndex === this.items.length - 1;
+    if (this.loopMode === 'off' && !this.isShuffled && isLast) {
+      this.video.pause();
+      this.video.currentTime = 0;
+      return;
+    }
+
+    this.next();
   }
 
   handleError() {
@@ -830,8 +847,8 @@ elements.shuffleBtn.addEventListener('click', () => {
 });
 
 elements.loopBtn.addEventListener('click', () => {
-  playerService.toggleLoop();
-  elements.loopBtn.classList.toggle('active', playerService.isLooped);
+  playerService.cycleLoop();
+  syncTransportUI();
 });
 
 function updateMuteState() {
@@ -896,7 +913,13 @@ function syncTransportUI() {
   elements.fullscreenBtn.classList.toggle('is-fullscreen', !!document.fullscreenElement);
   elements.shuffleBtn.classList.toggle('active', playerService.isShuffled);
   elements.shuffleBtn.setAttribute('aria-pressed', String(playerService.isShuffled));
-  elements.loopBtn.classList.toggle('active', playerService.isLooped);
+
+  const isLooped = playerService.loopMode !== 'off';
+  elements.loopBtn.classList.toggle('active', isLooped);
+  elements.loopBtn.setAttribute('aria-pressed', String(isLooped));
+  elements.loopBtn.dataset.mode = playerService.loopMode;
+  elements.loopBtn.setAttribute('aria-label', LOOP_LABELS[playerService.loopMode]);
+  elements.loopBtn.title = LOOP_LABELS[playerService.loopMode];
 }
 
 function renderPlaylist() {

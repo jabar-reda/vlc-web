@@ -61,6 +61,13 @@
       <path d="m7 22-4-4 4-4"/>
       <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
     </symbol>
+    <symbol id="i-repeat-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m17 2 4 4-4 4"/>
+      <path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
+      <path d="m7 22-4-4 4-4"/>
+      <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+      <path d="M11 10h1v4"/>
+    </symbol>
     <symbol id="i-maximize" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
       <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
@@ -190,8 +197,9 @@
               <button id="shuffleBtn" title="Shuffle" aria-label="Shuffle" aria-pressed="false">
                 <svg class="ico" aria-hidden="true"><use href="#i-shuffle"/></svg>
               </button>
-              <button id="loopBtn" title="Loop" aria-label="Loop" aria-pressed="false">
-                <svg class="ico" aria-hidden="true"><use href="#i-repeat"/></svg>
+              <button id="loopBtn" title="Loop off" aria-label="Loop off" aria-pressed="false" data-mode="off">
+                <svg class="ico ico-loop" aria-hidden="true"><use href="#i-repeat"/></svg>
+                <svg class="ico ico-loop-one" aria-hidden="true"><use href="#i-repeat-1"/></svg>
               </button>
             </div>
             <div class="volume">
