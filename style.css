@@ -182,6 +182,27 @@ main {
   background: #0c0c0c;
 }
 
+#app.is-dragging #dropzone {
+  background: #0a0a0a;
+}
+
+#app.is-dragging #dropzone::before {
+  content: "Drop to play";
+  position: absolute;
+  top: 0.9rem;
+  left: 50%;
+  z-index: 4;
+  transform: translateX(-50%);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: var(--step-1);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
 .placeholder {
   position: relative;
   flex: none;
@@ -220,7 +241,9 @@ main {
 }
 
 #dropzone.dragover .placeholder::before,
-#dropzone.dragover .placeholder::after {
+#dropzone.dragover .placeholder::after,
+#app.is-dragging .placeholder::before,
+#app.is-dragging .placeholder::after {
   border-color: var(--ink-strong);
 }
 

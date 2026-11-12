@@ -355,62 +355,108 @@ class PlayerService {
 }
 
 class DragDropService {
-  constructor(dropzone, placeholder, playerService) {
-    const preventDefault = (e) => e.preventDefault();
+  constructor(dropzone, playerService, app) {
+    this.dropzone = dropzone;
+    this.playerService = playerService;
+    this.app = app;
+    this.dragDepth = 0;
 
-    ['dragover', 'dragenter'].forEach(ev => {
-      dropzone.addEventListener(ev, e => {
-        preventDefault(e);
-        dropzone.classList.add('dragover');
-      });
+    document.addEventListener('dragenter', (e) => {
+      if (!this.acceptsDrag(e)) return;
+      e.preventDefault();
+      this.dragDepth += 1;
+      this.app.classList.add('is-dragging');
     });
 
-    ['dragleave', 'drop'].forEach(ev => {
-      dropzone.addEventListener(ev, e => {
-        preventDefault(e);
-        dropzone.classList.remove('dragover');
-      });
+    document.addEventListener('dragover', (e) => {
+      if (!this.acceptsDrag(e)) return;
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
     });
 
-    dropzone.addEventListener('drop', e => {
-      preventDefault(e);
+    document.addEventListener('dragleave', () => {
+      if (this.dragDepth === 0) return;
+      this.dragDepth -= 1;
+      if (this.dragDepth === 0) this.app.classList.remove('is-dragging');
+    });
+
+    document.addEventListener('drop', (e) => {
+      if (!this.acceptsDrag(e)) return;
+      e.preventDefault();
+      this.resetDragState();
+      this.handleDrop(e.dataTransfer);
+    });
+
+    ['dragend', 'blur'].forEach((eventName) => {
+      window.addEventListener(eventName, () => this.resetDragState());
+    });
+
+    dropzone.addEventListener('dragenter', (e) => {
+      if (!this.acceptsDrag(e)) return;
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragover', (e) => {
+      if (!this.acceptsDrag(e)) return;
+      e.preventDefault();
+    });
+
+    dropzone.addEventListener('dragleave', (e) => {
+      if (dropzone.contains(e.relatedTarget)) return;
       dropzone.classList.remove('dragover');
-      const dt = e.dataTransfer;
-      if (!dt) return;
-
-      const files = [];
-      for (let i = 0; i < dt.items.length; i++) {
-        const item = dt.items[i];
-        if (item.kind === 'file' && item.getAsFile) {
-          const file = item.getAsFile();
-          if (file) files.push(file);
-        }
-      }
-      if (files.length) {
-        playerService.addFiles(files);
-        return;
-      }
-
-      const urls = dt.getData('text/uri-list') || '';
-      const first = urls.split(/\r?\n/).map(line => line.trim()).find(line => line && !line.startsWith('#'));
-      if (first) {
-        playerService.addUrl(first);
-      }
     });
 
-    document.addEventListener('dragover', e => {
-      if (e.target === document.body) preventDefault(e);
-    });
+    dropzone.addEventListener('drop', () => dropzone.classList.remove('dragover'));
+  }
 
-    document.addEventListener('drop', e => {
-      if (e.target === document.body) {
-        preventDefault(e);
-        const dt = e.dataTransfer;
-        if (dt && dt.files.length) playerService.addFiles(dt.files);
-      }
-    });
+  acceptsDrag(event) {
+    const data = event.dataTransfer;
+    if (!data) return false;
+    const types = Array.from(data.types);
+    if (types.includes('Files')) return true;
+    if (!types.includes('text/uri-list')) return false;
+    return !this.isTextEntry(event.target);
+  }
+
+  isTextEntry(target) {
+    return target instanceof Element && target.closest('input, textarea, [contenteditable="true"]') !== null;
+  }
+
+  resetDragState() {
+    this.dragDepth = 0;
+    this.app.classList.remove('is-dragging');
+    this.dropzone.classList.remove('dragover');
+  }
+
+  handleDrop(dataTransfer) {
+    if (!dataTransfer) return;
+
+    const files = [];
+    for (const item of Array.from(dataTransfer.items || [])) {
+      if (item.kind !== 'file' || !item.getAsFile) continue;
+      const file = item.getAsFile();
+      if (file && !(file.size === 0 && file.type === '')) files.push(file);
+    }
+    if (!files.length && dataTransfer.files) {
+      for (const file of Array.from(dataTransfer.files)) files.push(file);
+    }
+    if (files.length) {
+      this.playerService.addFiles(files);
+      return;
+    }
+
+    const raw = dataTransfer.getData('text/uri-list') || dataTransfer.getData('text/plain') || '';
+    const first = raw
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .find((line) => line && !line.startsWith('#'));
+    if (first) {
+      this.playerService.addUrl(first);
+    }
   }
 }
+
 
 class KeyboardService {
   constructor(playerService) {
@@ -510,7 +556,8 @@ const playerService = new PlayerService({
   totalTime: elements.totalTime,
 });
 
-const dragDropService = new DragDropService(elements.dropzone, elements.placeholder, playerService);
+const appEl = document.getElementById('app');
+const dragDropService = new DragDropService(elements.dropzone, playerService, appEl);
 const keyboardService = new KeyboardService(playerService);
 
 elements.openBtn.addEventListener('click', () => elements.fileInput.click());
