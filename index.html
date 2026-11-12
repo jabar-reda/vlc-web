@@ -76,6 +76,10 @@
     <symbol id="i-folder-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>
     </symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+    </symbol>
     <symbol id="i-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M10 11v6"/>
       <path d="M14 11v6"/>
@@ -96,6 +100,10 @@
           <svg class="ico" aria-hidden="true"><use href="#i-folder-open"/></svg>
           <span class="btn-text">Open files</span>
         </button>
+        <button id="addLinkBtn" title="Add link" aria-label="Add link" aria-expanded="false" aria-controls="linkForm">
+          <svg class="ico" aria-hidden="true"><use href="#i-link"/></svg>
+          <span class="btn-text">Add link</span>
+        </button>
         <button id="fullscreenBtn" title="Fullscreen (F)" aria-label="Toggle fullscreen">
           <svg class="ico ico-max" aria-hidden="true"><use href="#i-maximize"/></svg>
           <svg class="ico ico-min" aria-hidden="true"><use href="#i-minimize"/></svg>
@@ -104,6 +112,12 @@
         <input type="file" id="fileInput" multiple hidden>
       </div>
     </header>
+
+    <form id="linkForm" class="link-form" novalidate hidden>
+      <input id="linkInput" type="url" inputmode="url" placeholder="https://example.com/video.mp4" aria-label="Media link" autocomplete="off" spellcheck="false">
+      <button type="submit" class="link-submit">Add</button>
+      <p class="link-error" id="linkError" hidden></p>
+    </form>
 
     <main>
       <section class="stage">

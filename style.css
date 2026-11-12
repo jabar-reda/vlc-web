@@ -149,6 +149,63 @@ button:disabled {
   height: 0.875rem;
 }
 
+/* Link form */
+
+.link-form {
+  flex: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.4rem 0.5rem;
+  padding: 0.6rem 1.125rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.link-form[hidden] {
+  display: none;
+}
+
+.link-form input {
+  min-width: 0;
+  height: 2rem;
+  padding: 0 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.link-form input::placeholder {
+  color: var(--faint);
+}
+
+.link-form input[aria-invalid="true"] {
+  border-color: var(--ink);
+}
+
+.link-submit {
+  height: 2rem;
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: var(--step-2);
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.link-submit:hover {
+  background: var(--hover);
+  border-color: var(--ink);
+}
+
+.link-error {
+  grid-column: 1 / -1;
+  font-size: var(--step-1);
+  color: var(--dim);
+}
+
 /* Layout */
 
 main {
@@ -964,11 +1021,15 @@ aside {
 }
 
 @media (max-width: 30rem) {
+  .logo .wordmark {
+    display: none;
+  }
+
   .app-header button {
     padding: 0 0.55rem;
   }
 
-  .app-header button:not(.primary) .btn-text {
+  .app-header button:not(.primary):not(#addLinkBtn) .btn-text {
     display: none;
   }
 

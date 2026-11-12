@@ -607,6 +607,10 @@ const elements = {
   loopBtn: document.getElementById('loopBtn'),
   fileInput: document.getElementById('fileInput'),
   openBtn: document.getElementById('openBtn'),
+  addLinkBtn: document.getElementById('addLinkBtn'),
+  linkForm: document.getElementById('linkForm'),
+  linkInput: document.getElementById('linkInput'),
+  linkError: document.getElementById('linkError'),
   clearAll: document.getElementById('clearAll'),
   prevBtn: document.getElementById('prevBtn'),
   rewindBtn: document.getElementById('rewindBtn'),
@@ -634,6 +638,47 @@ const dragDropService = new DragDropService(elements.dropzone, playerService, ap
 const keyboardService = new KeyboardService(playerService);
 
 elements.openBtn.addEventListener('click', () => elements.fileInput.click());
+
+function setLinkFormOpen(isOpen) {
+  elements.linkForm.hidden = !isOpen;
+  elements.addLinkBtn.setAttribute('aria-expanded', String(isOpen));
+  elements.linkError.hidden = true;
+  elements.linkInput.removeAttribute('aria-invalid');
+  if (isOpen) {
+    elements.linkInput.focus();
+  } else {
+    elements.addLinkBtn.focus();
+  }
+}
+
+elements.addLinkBtn.addEventListener('click', () => {
+  setLinkFormOpen(elements.linkForm.hidden);
+});
+
+elements.linkForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const value = elements.linkInput.value.trim();
+  if (!value) {
+    elements.linkInput.focus();
+    return;
+  }
+  if (playerService.addUrl(value)) {
+    elements.linkInput.value = '';
+    setLinkFormOpen(false);
+    return;
+  }
+  elements.linkInput.setAttribute('aria-invalid', 'true');
+  elements.linkError.hidden = false;
+  elements.linkError.textContent = 'Only http and https links can be opened.';
+  elements.linkInput.focus();
+});
+
+elements.linkForm.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  e.preventDefault();
+  elements.linkInput.value = '';
+  setLinkFormOpen(false);
+});
 
 elements.fileInput.addEventListener('change', async (e) => {
   const target = e.target;
