@@ -143,6 +143,8 @@ class PlayerService {
     this.video = elements.video;
     this.imageView = elements.imageView;
     this.textView = elements.textView;
+    this.audioView = elements.audioView;
+    this.audioTitle = elements.audioTitle;
     this.dropzone = elements.dropzone;
     this.placeholder = elements.placeholder;
     this.nowPlaying = elements.nowPlaying;
@@ -170,7 +172,12 @@ class PlayerService {
     this.hideAllMedia();
 
     if (item.type === 'video' || item.type === 'audio') {
-      this.video.style.display = 'block';
+      if (item.type === 'audio') {
+        this.audioTitle.textContent = item.name;
+        this.audioView.style.display = 'flex';
+      } else {
+        this.video.style.display = 'block';
+      }
       this.video.src = item.url;
       this.video.load();
       this.video.play().catch(() => {});
@@ -202,6 +209,7 @@ class PlayerService {
     this.video.style.display = 'none';
     this.imageView.style.display = 'none';
     this.textView.style.display = 'none';
+    this.audioView.style.display = 'none';
     this.placeholder.style.display = 'none';
   }
 
@@ -577,6 +585,8 @@ const elements = {
   video: document.getElementById('video'),
   imageView: document.getElementById('imageView'),
   textView: document.getElementById('textView'),
+  audioView: document.getElementById('audioView'),
+  audioTitle: document.getElementById('audioTitle'),
   dropzone: document.getElementById('dropzone'),
   placeholder: document.querySelector('.placeholder'),
   playlistEl: document.getElementById('playlist'),
@@ -609,6 +619,8 @@ const playerService = new PlayerService({
   video: elements.video,
   imageView: elements.imageView,
   textView: elements.textView,
+  audioView: elements.audioView,
+  audioTitle: elements.audioTitle,
   dropzone: elements.dropzone,
   placeholder: elements.placeholder,
   nowPlaying: elements.nowPlaying,
@@ -752,8 +764,10 @@ function syncSeekProgress() {
 }
 
 function syncTransportUI() {
-  elements.playBtn.classList.toggle('is-playing', !elements.video.paused);
-  elements.playBtn.setAttribute('aria-pressed', String(!elements.video.paused));
+  const isPlaying = !elements.video.paused;
+  elements.playBtn.classList.toggle('is-playing', isPlaying);
+  elements.playBtn.setAttribute('aria-pressed', String(isPlaying));
+  elements.audioView.classList.toggle('is-playing', isPlaying);
 
   const volumePercent = Math.round(playerService.getVolume() * 100);
   elements.volumeBar.value = String(volumePercent);
