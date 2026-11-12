@@ -127,13 +127,18 @@ function readPLS(text) {
   return { entries, skipped };
 }
 
+const uiState = {
+  isSeeking: false,
+};
+
 class PlayerService {
-  constructor(elements) {
+  constructor(elements, uiState) {
     this.items = [];
     this.currentIndex = -1;
     this.isPlaying = false;
     this.isShuffled = false;
     this.isLooped = false;
+    this.uiState = uiState;
 
     this.video = elements.video;
     this.imageView = elements.imageView;
@@ -156,7 +161,7 @@ class PlayerService {
   }
 
   loadItem(index) {
-    isSeeking = false;
+    this.uiState.isSeeking = false;
     if (index < 0 || index >= this.items.length) return;
     const item = this.items[index];
     this.currentIndex = index;
@@ -174,16 +179,12 @@ class PlayerService {
       this.imageView.src = item.url;
       this.video.removeAttribute('src');
       this.video.load();
-      this.seekbar.value = '0';
-      this.currentTimeEl.textContent = '00:00';
-      this.totalTimeEl.textContent = '--:--';
+      this.resetSeekUI();
     } else {
       this.textView.style.display = 'block';
       this.video.removeAttribute('src');
       this.video.load();
-      this.seekbar.value = '0';
-      this.currentTimeEl.textContent = '00:00';
-      this.totalTimeEl.textContent = '--:--';
+      this.resetSeekUI();
       this.loadTextFile(item);
     }
 
@@ -202,6 +203,13 @@ class PlayerService {
     this.imageView.style.display = 'none';
     this.textView.style.display = 'none';
     this.placeholder.style.display = 'none';
+  }
+
+  resetSeekUI() {
+    this.seekbar.value = '0';
+    this.seekbar.style.setProperty('--progress', '0%');
+    this.currentTimeEl.textContent = '00:00';
+    this.totalTimeEl.textContent = '--:--';
   }
 
   playPause() {
@@ -607,7 +615,7 @@ const playerService = new PlayerService({
   seekbar: elements.seekbar,
   currentTime: elements.currentTime,
   totalTime: elements.totalTime,
-});
+}, uiState);
 
 const appEl = document.getElementById('app');
 const dragDropService = new DragDropService(elements.dropzone, playerService, appEl);
@@ -631,16 +639,14 @@ elements.stopBtn.addEventListener('click', () => playerService.stop());
 elements.forwardBtn.addEventListener('click', () => playerService.forward());
 elements.nextBtn.addEventListener('click', () => playerService.next());
 
-let isSeeking = false;
-
 elements.seekbar.addEventListener('pointerdown', (e) => {
-  isSeeking = true;
+  uiState.isSeeking = true;
   elements.seekbar.setPointerCapture(e.pointerId);
 });
-elements.seekbar.addEventListener('lostpointercapture', () => { isSeeking = false; });
-elements.seekbar.addEventListener('pointercancel', () => { isSeeking = false; });
-elements.seekbar.addEventListener('change', () => { isSeeking = false; });
-window.addEventListener('pointerup', () => { isSeeking = false; });
+elements.seekbar.addEventListener('lostpointercapture', () => { uiState.isSeeking = false; });
+elements.seekbar.addEventListener('pointercancel', () => { uiState.isSeeking = false; });
+elements.seekbar.addEventListener('change', () => { uiState.isSeeking = false; });
+window.addEventListener('pointerup', () => { uiState.isSeeking = false; });
 
 elements.seekbar.addEventListener('input', () => {
   if (elements.video.duration && !isNaN(elements.video.duration)) {
@@ -651,7 +657,7 @@ elements.seekbar.addEventListener('input', () => {
 
 elements.video.addEventListener('timeupdate', () => {
   syncDurationUI();
-  if (isSeeking || elements.seekbar.disabled) return;
+  if (uiState.isSeeking || elements.seekbar.disabled) return;
   elements.seekbar.value = String(elements.video.currentTime);
   elements.currentTime.textContent = formatTime(elements.video.currentTime);
   syncSeekProgress();
@@ -724,12 +730,17 @@ function syncDurationUI() {
   const isKnown = isFinite(duration) && duration > 0;
   elements.seekbar.disabled = !isKnown;
   if (!isKnown) {
-    elements.totalTime.textContent = '--:--';
+    if (elements.totalTime.textContent !== '--:--') {
+      elements.totalTime.textContent = '--:--';
+    }
     elements.seekbar.style.setProperty('--progress', '0%');
     return;
   }
-  elements.seekbar.max = String(duration);
-  elements.totalTime.textContent = formatTime(duration);
+  const max = String(duration);
+  if (elements.seekbar.max !== max) {
+    elements.seekbar.max = max;
+    elements.totalTime.textContent = formatTime(duration);
+  }
   syncSeekProgress();
 }
 
