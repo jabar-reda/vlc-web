@@ -730,23 +730,34 @@ aside {
 
 #playlist li {
   flex: none;
+  border-bottom: 1px solid var(--line-soft);
+  color: #a6a6a6;
+  direction: ltr;
+  text-align: left;
+}
+
+#playlist li .row {
   display: grid;
   grid-template-columns: 1.6rem minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.55rem;
+  width: 100%;
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid var(--line-soft);
+  border-radius: 0;
   font-size: var(--step-2);
-  color: #a6a6a6;
-  direction: ltr;
+  color: inherit;
   text-align: left;
   cursor: pointer;
   transition: background-color 0.12s ease, color 0.12s ease;
 }
 
-#playlist li:hover {
+#playlist li .row:hover {
   background: var(--hover);
   color: var(--ink);
+}
+
+#playlist li .row:focus-visible {
+  outline-offset: -2px;
 }
 
 #playlist li.active {

@@ -132,7 +132,7 @@
           </div>
         </div>
         <div id="controls">
-          <p id="nowPlaying" class="now-playing">No file loaded</p>
+          <p id="nowPlaying" class="now-playing" role="status" aria-live="polite">No file loaded</p>
           <div class="seekRow">
             <span class="time time-current" id="currentTime">00:00</span>
             <input type="range" id="seekbar" min="0" max="100" value="0" step="0.1" aria-label="Seek">
@@ -146,7 +146,7 @@
               <button id="rewindBtn" title="Rewind 10s" aria-label="Rewind 10 seconds">
                 <svg class="ico" aria-hidden="true"><use href="#i-rotate-ccw"/></svg>
               </button>
-              <button id="playBtn" title="Play / Pause (Space)" aria-label="Play or pause">
+              <button id="playBtn" title="Play / Pause (Space)" aria-label="Play or pause" aria-pressed="false">
                 <svg class="ico ico-play" aria-hidden="true"><use href="#i-play"/></svg>
                 <svg class="ico ico-pause" aria-hidden="true"><use href="#i-pause"/></svg>
               </button>
@@ -161,10 +161,10 @@
               </button>
             </div>
             <div class="modes">
-              <button id="shuffleBtn" title="Shuffle" aria-label="Shuffle">
+              <button id="shuffleBtn" title="Shuffle" aria-label="Shuffle" aria-pressed="false">
                 <svg class="ico" aria-hidden="true"><use href="#i-shuffle"/></svg>
               </button>
-              <button id="loopBtn" title="Loop" aria-label="Loop">
+              <button id="loopBtn" title="Loop" aria-label="Loop" aria-pressed="false">
                 <svg class="ico" aria-hidden="true"><use href="#i-repeat"/></svg>
               </button>
             </div>

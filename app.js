@@ -697,11 +697,6 @@ elements.loopBtn.addEventListener('click', () => {
   elements.loopBtn.classList.toggle('active', playerService.isLooped);
 });
 
-document.addEventListener('click', e => {
-  const target = e.target instanceof Element ? e.target.closest('button, #seekbar, #volumeBar') : null;
-  if (target && e.detail > 0) target.blur();
-});
-
 function updateMuteState() {
   const muted = playerService.getIsMuted();
   elements.volumeBtn.classList.toggle('is-muted', muted);
@@ -747,6 +742,7 @@ function syncSeekProgress() {
 
 function syncTransportUI() {
   elements.playBtn.classList.toggle('is-playing', !elements.video.paused);
+  elements.playBtn.setAttribute('aria-pressed', String(!elements.video.paused));
 
   const volumePercent = Math.round(playerService.getVolume() * 100);
   elements.volumeBar.value = String(volumePercent);
@@ -755,6 +751,7 @@ function syncTransportUI() {
 
   elements.fullscreenBtn.classList.toggle('is-fullscreen', !!document.fullscreenElement);
   elements.shuffleBtn.classList.toggle('active', playerService.isShuffled);
+  elements.shuffleBtn.setAttribute('aria-pressed', String(playerService.isShuffled));
   elements.loopBtn.classList.toggle('active', playerService.isLooped);
 }
 
@@ -762,8 +759,16 @@ function renderPlaylist() {
   elements.playlistEl.textContent = '';
   playerService.items.forEach((item, index) => {
     const li = document.createElement('li');
-    li.dataset.index = String(index);
-    li.className = index === playerService.currentIndex ? 'active' : '';
+    if (index === playerService.currentIndex) {
+      li.className = 'active';
+      li.setAttribute('aria-current', 'true');
+    }
+
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'row';
+    row.dataset.index = String(index);
+    row.title = `${item.name} \u2013 ${item.type}`;
 
     const num = document.createElement('span');
     num.className = 'num';
@@ -777,11 +782,11 @@ function renderPlaylist() {
     tag.className = 'tag';
     tag.textContent = typeLabel(item.type);
 
-    li.appendChild(num);
-    li.appendChild(label);
-    li.appendChild(tag);
-    li.title = `${item.name} \u2013 ${item.type}`;
-    li.addEventListener('click', () => playerService.loadItem(index));
+    row.appendChild(num);
+    row.appendChild(label);
+    row.appendChild(tag);
+    row.addEventListener('click', () => playerService.loadItem(index));
+    li.appendChild(row);
     elements.playlistEl.appendChild(li);
   });
   elements.count.textContent = String(playerService.items.length);
