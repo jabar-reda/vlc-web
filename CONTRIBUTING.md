@@ -115,7 +115,8 @@ Keep changes small and focused. A PR that does one thing well is far easier to r
 ### Media-file and resource handling
 
 - Locally dropped or opened files are loaded via `URL.createObjectURL`. These object URLs must be revoked (`URL.revokeObjectURL`) on unload and when the playlist is cleared, to avoid memory leaks.
-- Remote URLs — playlist entries (`http`, `rtsp`, and similar) or dropped `http(s)` links — must be flagged with `remote: true` and are **never** revoked.
+- Remote URLs — playlist entries or dropped `http(s)` links — must be flagged with `remote: true` and are **never** revoked. Only `http(s)` sources are accepted; other protocols are rejected with a message.
+- Subtitle files are attached as `<track>` elements backed by their own object URL, which is revoked when the item changes, the playlist is cleared, and the page unloads.
 - Any new path that handles local files must respect this revoke/never-revoke split.
 
 ---
@@ -129,13 +130,20 @@ There is **no automated test suite or linter**; CI runs `node --check app.js` to
 > | Test area | What to verify |
 > | --- | --- |
 > | Opening files | Clicking open loads local media and it plays/pauses/seeks correctly. |
-> | Dragging files | Dragging one or more files onto the window adds them to the playlist and plays as expected. |
-> | Playlists | `.m3u` and `.pls` files are parsed correctly (`readM3U` / `readPLS`); entries appear in order with correct titles. |
+> | Dragging files | Dragging files onto the stage, the sidebar, or the transport bar adds them to the playlist instead of navigating away; the whole window shows the drop state. |
+> | Playlists | `.m3u` and `.pls` files are parsed correctly (`readM3U` / `readPLS`); `#EXTINF` titles appear, entries keep their order, and non-`http(s)` entries are skipped with a count. |
 > | Keyboard shortcuts | All documented shortcuts work; nothing throws in the console. |
 > | Remote streams | Opening an `http(s)` link with a media extension works; other protocols are rejected with a message. Playlist entries carry `remote: true` and are never revoked on clear. |
+> | Link form | The header button opens the link field on a phone, submits a valid `https` link, keeps the form open with a message on an invalid one, and `Escape` closes it. |
+> | Audio view | An audio file shows its title and a level meter that moves while playing and stops when paused. |
+> | Subtitles | Dropping a `.vtt` or `.srt` file over a playing video shows the cues; switching items removes the previous track; dropping one without a video shows a message. |
+> | Loop modes | The loop button cycles off, one item, and all; a finished item repeats, wraps, or stops at the end accordingly. |
+> | Resume | Volume survives a reload; a video closed mid-way resumes near its position; a finished item starts from zero. |
+> | Stop | `S` stops playback but keeps the file loaded, so `Space` plays it again from the start. |
 > | UI refresh | Time, position, and state indicators update from media events (`timeupdate`, `play`/`pause`, `loadedmetadata`/`durationchange`, `volumechange`). |
-> | Clear playlist | Clearing revokes object URLs for local files and does not error on remote ones. |
+> | Clear playlist | Clearing revokes object URLs for local files and subtitle tracks, and does not error on remote ones. |
 > | Icons | Any new/edited SVG `<symbol>` renders with `currentColor` in both light and (if present) dark contexts. |
+> | Mobile layout | Below 46rem the playlist collapses from the header button, selecting an item folds it away, and the button is hidden on wider screens. |
 > | `file://` from scratch | Start from a clean state by double-clicking `index.html`; nothing depends on a server or origin. |
 > | Basic playback | Load, play, pause, seek, volume, mute, and playlist navigation behave correctly end to end. |
 

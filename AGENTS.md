@@ -61,12 +61,19 @@ definition is unavailable at runtime).
   playlist rows and the now-playing line with `createElement` + `textContent`; `innerHTML` is only
   for static strings. `escapeHTML()` was deleted on purpose — do not re-add it.
 - **Object URL split**: local files use `URL.createObjectURL` and must be revoked on playlist clear
-  and on unload; remote entries are flagged `remote: true` and must **never** be revoked. Known
-  pre-existing gap: the temporary base object URL created for playlist files in `addFiles()` is
-  never revoked.
-- **Dropped links (`addUrl`)**: `http`/`https` only — other protocols are rejected with a message.
-  The media type is classified from the URL **pathname** (a `?query` or `#hash` in the URL breaks
-  extension matching), and the display label is derived from the pathname too.
+  and on unload; remote entries are flagged `remote: true` and must **never** be revoked. Subtitle
+  tracks carry their own object URL, revoked on item change, playlist clear, and unload.
+- **Source policy**: one helper, `isSupportedSource()`, accepts `http(s)` only; drops, the link form,
+  and playlist parsing all go through it, and skipped playlist entries are counted and reported.
+- **Dropped links (`addUrl`)**: the media type is classified from the URL **pathname** (a `?query` or
+  `#hash` in the URL breaks extension matching), and the display label is derived from the pathname too.
+- **Drag state**: `DragDropService` counts `dragenter`/`dragleave` on `document` (`dragDepth`) and
+  toggles `#app.is-dragging`; the counter is reset on `drop`, `dragend`, and `window` `blur`.
+- **Loop modes** are `'off' | 'one' | 'all'` (`PlayerService.loopMode`), cycled by `cycleLoop()`; the
+  button reflects the mode through `data-mode` and `aria-pressed`.
+- **Saved state**: `vlcweb.volume` and `vlcweb.positions` in `localStorage`, always read and written
+  inside `try/catch` (blocked storage must never break playback). Positions are keyed by
+  `name|size|lastModified` for local files and by URL for remote entries, capped at 50.
 - **Keyboard handler**: keys are ignored while an `INPUT` has focus, and `Space`/`Enter` are ignored
   inside a `<button>` (otherwise a focused button fires both the shortcut and its own click).
 - **Icons** are inline Lucide `<symbol>` elements in `index.html` using `currentColor` — no icon

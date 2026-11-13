@@ -41,16 +41,18 @@ Doppelklick auf `index.html` (oder öffne es in einem beliebigen Browser über `
 
 | Funktion | Beschreibung |
 | --- | --- |
-|  Video /  Audio | HTML5-Wiedergabe gängiger Webformate (MP4, WebM, MP3, WAV, OGG, …) |
+|  Video /  Audio | HTML5-Wiedergabe gängiger Webformate (MP4, WebM, MP3, WAV, OGG, …), mit eigener Audioansicht |
 |  Bilder | Anzeige von PNG, JPG, GIF, WebP, SVG und mehr |
-|  Text & Untertitel | Anzeige von TXT, MD, SRT, VTT, ASS, CSV, JSON, Logs… |
+|  Text | Anzeige von TXT, MD, CSV, JSON, Logs… |
+|  Untertitel | `.vtt`- oder `.srt`-Datei an das laufende Video anhängen |
 |  Wiedergabelisten | Öffnen von `.m3u` / `.m3u8` / `.pls`-Dateien (lokal und remote URLs) |
-|  Remote-Streams | HTTP(S)-Links per Drag & Drop oder Eingabe laden und direkt streamen (http/https, Media-Erweiterung erforderlich) |
-|  Drag & Drop | Beliebig viele Dateien auf die Seite ziehen |
-|  Wiedergabeliste | Einzelne Titel per Klick abspielen, automatischer Weiterlauf, Liste mit einem Klick leeren |
-|  Zufällig /  Schleife | Zufällige oder wiederholte Wiedergabe |
+|  Remote-Streams | HTTP(S)-Links per Drag & Drop oder Eingabe laden und direkt streamen (http/https, Media-Erweiterung erforderlich), über die Kopfzeilen-Schaltfläche auch auf Touch-Geräten |
+|  Drag & Drop | Beliebig viele Dateien überall im Fenster ablegen |
+|  Wiedergabeliste | Einzelne Titel per Klick abspielen, automatischer Weiterlauf, Liste mit einem Klick leeren, auf kleinen Bildschirmen einklappbar |
+|  Zufällig /  Schleife | Zufällige Reihenfolge oder Schleife für einen Titel / die ganze Liste |
 |  Steuerung | Abspielen / Pause, Stopp, Vorheriger / Nächster, ±10s Springen |
-|  Lautstärke | Lautstärkeregel mit Stummschalt-Taste |
+|  Lautstärke | Lautstärkeregel mit Stummschalt-Taste; der Pegel wird gemerkt |
+|  Fortsetzen | Die Wiedergabeposition wird pro Titel gemerkt |
 |  Vollbild | Ein-Klick-Vollbild mit automatisch aktualisierendem Symbol |
 
 ## Tastenkürzel
@@ -72,10 +74,11 @@ Alles, was der Media-Stack des Browsers unterstützt, wird vom Dateiauswähler u
 - **Video**: MP4 (H.264), WebM (VP8/VP9), MKV, AVI, MOV, OGV, MPEG, M2TS, TS, FLV, WMV, 3GP und mehr.
 - **Audio**: MP3, WAV, M4A, AAC, FLAC, OGG, OPUS, WMA, AIFF, MIDI, AMR und mehr.
 - **Bilder**: PNG, JPG, GIF, WebP, SVG, BMP, ICO, AVIF, TIFF, JXL.
-- **Text / Daten**: TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, Logdateien und jede Erweiterung — unbekannte Dateien werden als Text geöffnet.
+- **Text / Daten**: TXT, MD, CSV, JSON, XML, Logdateien und jede Erweiterung — unbekannte Dateien werden als Text geöffnet.
+- **Untertitel**: VTT und SRT, an das laufende Video angehängt (SRT wird im Speicher umgewandelt).
 - **Wiedergabelisten**: M3U, M3U8, PLS.
 
-> **Hinweis**: Der Browser kann nur wiedergeben, was er nativ unterstützt. Seltene Container wie MKV, AVI oder FLAC werden zur Wiedergabeliste hinzugefügt, können aber möglicherweise ohne Codec-Plugin nicht decodiert werden. Verwende für diese Formate die Desktop-Version von VLC. Beim direkten Ablegen wird nur `http(s)` akzeptiert — der Link wird anhand der Erweiterung seines Pfads klassifiziert und benötigt daher eine unterstützte Media-Erweiterung; andere Protokolle werden mit einer Meldung abgelehnt. Nicht-HTTP-Einträge, die *in* Wiedergabellistendateien gefunden werden, werden zur Liste hinzugefügt, sind im Browser aber nicht streambar.
+> **Hinweis**: Der Browser kann nur wiedergeben, was er nativ unterstützt. Seltene Container wie MKV, AVI oder FLAC werden zur Wiedergabeliste hinzugefügt, können aber möglicherweise ohne Codec-Plugin nicht decodiert werden. Verwende für diese Formate die Desktop-Version von VLC. Beim direkten Ablegen wird nur `http(s)` akzeptiert — der Link wird anhand der Erweiterung seines Pfads klassifiziert und benötigt daher eine unterstützte Media-Erweiterung; andere Protokolle werden mit einer Meldung abgelehnt. Wiedergabelisteneinträge, die nicht `http(s)` sind, werden übersprungen und mit einer Anzahl gemeldet.
 
 ## Design
 

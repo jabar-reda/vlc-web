@@ -41,16 +41,18 @@ Double-cliquez sur `index.html` (ou ouvrez-le dans un navigateur via `file://`).
 
 | Fonctionnalité | Description |
 | --- | --- |
-|  Vidéo /  Audio | Lecture HTML5 des formats web courants (MP4, WebM, MP3, WAV, OGG, …) |
+|  Vidéo /  Audio | Lecture HTML5 des formats web courants (MP4, WebM, MP3, WAV, OGG, …), avec une vue audio dédiée |
 |  Images | Affichage de PNG, JPG, GIF, WebP, SVG et plus |
-|  Texte & sous-titres | Lecture de TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
+|  Texte | Lecture de TXT, MD, CSV, JSON, logs… |
+|  Sous-titres | Joindre un fichier `.vtt` ou `.srt` à la vidéo en cours |
 |  Listes de lecture | Ouverture de fichiers `.m3u` / `.m3u8` / `.pls` (locaux et URLs distants) |
-|  Flux distants | Déposez ou chargez un lien HTTP(S) et diffusez-le directement (http/https, extension média requise) |
-|  Glisser-déposer | Déposez un nombre quelconque de fichiers n'importe où sur la page |
-|  Liste de lecture | Cliquez sur un élément pour lire, avancement automatique, effacement en un clic |
-|  Aléatoire /  Boucle | Lecture aléatoire ou en boucle |
+|  Flux distants | Déposez ou chargez un lien HTTP(S) et diffusez-le directement (http/https, extension média requise), via le bouton d'en-tête sur les appareils tactiles |
+|  Glisser-déposer | Déposez un nombre quelconque de fichiers n'importe où dans la fenêtre |
+|  Liste de lecture | Cliquez sur un élément pour lire, avancement automatique, effacement en un clic, repliée sur les petits écrans |
+|  Aléatoire /  Boucle | Ordre aléatoire, ou boucle sur un élément / toute la liste |
 |  Contrôles | Lecture / pause, arrêt, précédent / suivant, avance/recul de ±10 s |
-|  Volume | Curseur de volume avec bouton muet |
+|  Volume | Curseur de volume avec bouton muet ; le niveau est mémorisé |
+|  Reprise | La position de lecture est mémorisée pour chaque élément |
 |  Plein écran | Plein écran en un clic avec icône mise à jour automatiquement |
 
 ## Raccourcis clavier
@@ -72,10 +74,11 @@ Tout ce que la pile multimédia du navigateur prend en charge est accepté par l
 - **Vidéo** : MP4 (H.264), WebM (VP8/VP9), MKV, AVI, MOV, OGV, MPEG, M2TS, TS, FLV, WMV, 3GP et plus.
 - **Audio** : MP3, WAV, M4A, AAC, FLAC, OGG, OPUS, WMA, AIFF, MIDI, AMR et plus.
 - **Images** : PNG, JPG, GIF, WebP, SVG, BMP, ICO, AVIF, TIFF, JXL.
-- **Texte / données** : TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, fichiers log, et toute extension — les fichiers inconnus s'ouvrent en texte.
+- **Texte / données** : TXT, MD, CSV, JSON, XML, fichiers log, et toute extension — les fichiers inconnus s'ouvrent en texte.
+- **Sous-titres** : VTT et SRT, joints à la vidéo en cours (SRT est converti en mémoire).
 - **Listes de lecture** : M3U, M3U8, PLS.
 
-> **Remarque** : Le navigateur ne peut lire que ce qu'il supporte nativement. Les conteneurs rares comme MKV, AVI ou FLAC sont ajoutés à la liste de lecture mais peuvent ne pas être décodés sans un plugin de codecs. Pour ceux-là, utilisez l'application desktop VLC. Déposer directement un lien n'accepte que `http(s)` — le lien est classé d'après l'extension de son chemin, il doit donc porter une extension média prise en charge ; les autres protocoles sont refusés avec un message. Les entrées hors HTTP trouvées *dans* les fichiers de liste de lecture sont ajoutées à la liste mais ne peuvent pas être diffusées dans le navigateur.
+> **Remarque** : Le navigateur ne peut lire que ce qu'il supporte nativement. Les conteneurs rares comme MKV, AVI ou FLAC sont ajoutés à la liste de lecture mais peuvent ne pas être décodés sans un plugin de codecs. Pour ceux-là, utilisez l'application desktop VLC. Déposer directement un lien n'accepte que `http(s)` — le lien est classé d'après l'extension de son chemin, il doit donc porter une extension média prise en charge ; les autres protocoles sont refusés avec un message. Les entrées de liste de lecture hors `http(s)` sont ignorées et signalées avec un décompte.
 
 ## Design
 
