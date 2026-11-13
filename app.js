@@ -298,6 +298,15 @@ class PlayerService {
     renderPlaylist();
   }
 
+  showAudioIfNoPicture() {
+    if (this.video.videoWidth > 0) return;
+    const item = this.items[this.currentIndex];
+    if (!item || item.type !== 'video') return;
+    this.video.style.display = 'none';
+    this.audioTitle.textContent = item.name;
+    this.audioView.style.display = 'flex';
+  }
+
   hideAllMedia() {
     this.video.pause();
     this.video.style.display = 'none';
@@ -931,6 +940,7 @@ elements.video.addEventListener('timeupdate', () => {
 elements.video.addEventListener('loadedmetadata', () => {
   syncDurationUI();
   playerService.restorePosition();
+  playerService.showAudioIfNoPicture();
 });
 elements.video.addEventListener('durationchange', syncDurationUI);
 elements.video.addEventListener('play', syncTransportUI);
