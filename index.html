@@ -83,6 +83,11 @@
     <symbol id="i-folder-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>
     </symbol>
+    <symbol id="i-music" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </symbol>
     <symbol id="i-panel-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect width="18" height="18" x="3" y="3" rx="2"/>
       <path d="M15 3v18"/>
@@ -154,6 +159,9 @@
           <img id="imageView" alt="">
           <pre id="textView"></pre>
           <div id="audioView">
+            <div class="audio-cover">
+              <svg class="ico" aria-hidden="true"><use href="#i-music"/></svg>
+            </div>
             <p class="audio-kicker">Audio</p>
             <p class="audio-title" id="audioTitle"></p>
             <div class="audio-meter" aria-hidden="true">
