@@ -41,16 +41,18 @@ Haz doble clic en `index.html` (o ábrelo en cualquier navegador mediante `file:
 
 | Función | Descripción |
 | --- | --- |
-|  Vídeo /  Audio | Reproducción HTML5 de formatos web habituales (MP4, WebM, MP3, WAV, OGG, …) |
+|  Vídeo /  Audio | Reproducción HTML5 de formatos web habituales (MP4, WebM, MP3, WAV, OGG, …), con una vista de audio propia |
 |  Imágenes | Ver PNG, JPG, GIF, WebP, SVG y más |
-|  Texto y subtítulos | Leer TXT, MD, SRT, VTT, ASS, CSV, JSON, registros… |
+|  Texto | Leer TXT, MD, CSV, JSON, registros… |
+|  Subtítulos | Adjuntar un archivo `.vtt` o `.srt` al vídeo en reproducción |
 |  Listas de reproducción | Abrir archivos `.m3u` / `.m3u8` / `.pls` (URLs locales y remotas) |
-|  Transmisiones remotas | Suelta o carga un enlace HTTP(S) y reprodúcelo directamente (http/https, se requiere extensión de medio) |
-|  Arrastrar y soltar | Suelta cualquier cantidad de archivos en cualquier parte de la página |
-|  Lista de reproducción | Haz clic en cualquier elemento para reproducirlo, avance automático, borrar con un botón |
-|  Aleatorio /  Bucle | Reproducción aleatoria o repetida |
+|  Transmisiones remotas | Suelta o carga un enlace HTTP(S) y reprodúcelo directamente (http/https, se requiere extensión de medio), desde el botón de la cabecera en dispositivos táctiles |
+|  Arrastrar y soltar | Suelta cualquier cantidad de archivos en cualquier parte de la ventana |
+|  Lista de reproducción | Haz clic en cualquier elemento para reproducirlo, avance automático, borrar con un botón, se pliega en pantallas pequeñas |
+|  Aleatorio /  Bucle | Orden aleatorio, o bucle en un elemento / en toda la lista |
 |  Transporte | Reproducir / pausar, detener, anterior / siguiente, ±10 s de avance |
-|  Volumen | Control deslizante de volumen con conmutador de silencio |
+|  Volumen | Control deslizante de volumen con conmutador de silencio; el nivel se recuerda |
+|  Reanudar | La posición de reproducción se recuerda para cada elemento |
 |  Pantalla completa | Pantalla completa con un clic e icono que se actualiza automáticamente |
 
 ## Atajos de teclado
@@ -72,10 +74,11 @@ Todo lo que admite de forma nativa el sistema multimedia del navegador es acepta
 - **Vídeo**: MP4 (H.264), WebM (VP8/VP9), MKV, AVI, MOV, OGV, MPEG, M2TS, TS, FLV, WMV, 3GP y más.
 - **Audio**: MP3, WAV, M4A, AAC, FLAC, OGG, OPUS, WMA, AIFF, MIDI, AMR y más.
 - **Imágenes**: PNG, JPG, GIF, WebP, SVG, BMP, ICO, AVIF, TIFF, JXL.
-- **Texto / datos**: TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, archivos de registro y cualquier extensión — los archivos desconocidos se abren como texto.
+- **Texto / datos**: TXT, MD, CSV, JSON, XML, archivos de registro y cualquier extensión — los archivos desconocidos se abren como texto.
+- **Subtítulos**: VTT y SRT, adjuntos al vídeo en reproducción (SRT se convierte en memoria).
 - **Listas de reproducción**: M3U, M3U8, PLS.
 
-> **Nota**: el navegador solo puede reproducir lo que admite de forma nativa. Los contenedores poco comunes, como MKV, AVI o FLAC, se añaden a la lista de reproducción pero es posible que no se descodifiquen sin un plugin de códecs. Para ellos, usa la aplicación de escritorio de VLC. Al soltar un enlace directamente solo se acepta `http(s)`: el enlace se clasifica según la extensión de su ruta, así que debe llevar una extensión de medio admitida; los demás protocolos se rechazan con un mensaje. Las entradas que no usan HTTP y se encuentran *dentro* de los archivos de lista de reproducción se añaden a la lista, pero no se pueden transmitir en el navegador.
+> **Nota**: el navegador solo puede reproducir lo que admite de forma nativa. Los contenedores poco comunes, como MKV, AVI o FLAC, se añaden a la lista de reproducción pero es posible que no se descodifiquen sin un plugin de códecs. Para ellos, usa la aplicación de escritorio de VLC. Al soltar un enlace directamente solo se acepta `http(s)`: el enlace se clasifica según la extensión de su ruta, así que debe llevar una extensión de medio admitida; los demás protocolos se rechazan con un mensaje. Las entradas de lista de reproducción que no son `http(s)` se omiten y se informa de su número.
 
 ## Diseño
 

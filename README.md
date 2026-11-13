@@ -41,16 +41,18 @@ Double-click `index.html` (or open it in any browser via `file://`). No dependen
 
 | Feature | Description |
 | --- | --- |
-|  Video /  Audio | HTML5 playback of common web formats (MP4, WebM, MP3, WAV, OGG, …) |
+|  Video /  Audio | HTML5 playback of common web formats (MP4, WebM, MP3, WAV, OGG, …), with a dedicated audio view |
 |  Images | View PNG, JPG, GIF, WebP, SVG and more |
-|  Text & subtitles | Read TXT, MD, SRT, VTT, ASS, CSV, JSON, logs… |
+|  Text | Read TXT, MD, CSV, JSON, logs… |
+|  Subtitles | Attach a `.vtt` or `.srt` file to the video that is playing |
 |  Playlists | Open `.m3u` / `.m3u8` / `.pls` files (local and remote URLs) |
-|  Remote streams | Drop or load an HTTP(S) link and stream it directly (http/https, media extension required) |
-|  Drag & drop | Drop any number of files anywhere on the page |
-|  Playlist | Click any item to play, auto-advance, clear with one button |
-|  Shuffle /  Loop | Randomized or repeated playback |
+|  Remote streams | Drop or load an HTTP(S) link and stream it directly (http/https, media extension required), from the header button on touch devices |
+|  Drag & drop | Drop any number of files anywhere in the window |
+|  Playlist | Click any item to play, auto-advance, clear with one button, collapses on small screens |
+|  Shuffle /  Loop | Random order, or loop one item / the whole playlist |
 |  Transport | Play / pause, stop, previous / next, ±10s seeking |
-|  Volume | Volume slider with mute toggle |
+|  Volume | Volume slider with mute toggle; the level is remembered |
+|  Resume | The playback position is remembered for each item |
 |  Fullscreen | One-click fullscreen with an auto-updating icon |
 
 ## Keyboard shortcuts
@@ -72,10 +74,11 @@ Everything the browser's media stack supports is accepted by the file picker and
 - **Video**: MP4 (H.264), WebM (VP8/VP9), MKV, AVI, MOV, OGV, MPEG, M2TS, TS, FLV, WMV, 3GP and more.
 - **Audio**: MP3, WAV, M4A, AAC, FLAC, OGG, OPUS, WMA, AIFF, MIDI, AMR and more.
 - **Images**: PNG, JPG, GIF, WebP, SVG, BMP, ICO, AVIF, TIFF, JXL.
-- **Text / data**: TXT, MD, SRT, VTT, ASS, CSV, JSON, XML, log files, and any extension — unknown files open as text.
+- **Text / data**: TXT, MD, CSV, JSON, XML, log files, and any extension — unknown files open as text.
+- **Subtitles**: VTT and SRT, attached to the video that is playing (SRT is converted in memory).
 - **Playlists**: M3U, M3U8, PLS.
 
-> **Note**: The browser can only play what it supports natively. Rare containers such as MKV, AVI or FLAC are added to the playlist but may not decode without a codec plugin. For those, use the desktop VLC application. Dropping a link directly accepts `http(s)` only — the link is classified by its path extension, so it needs a supported media extension; other protocols are rejected with a message. Non-HTTP entries found *inside* playlist files are added to the list but cannot be streamed in the browser.
+> **Note**: The browser can only play what it supports natively. Rare containers such as MKV, AVI or FLAC are added to the playlist but may not decode without a codec plugin. For those, use the desktop VLC application. Dropping a link directly accepts `http(s)` only — the link is classified by its path extension, so it needs a supported media extension; other protocols are rejected with a message. Playlist entries that are not `http(s)` are skipped and reported with a count.
 
 ## Design
 
