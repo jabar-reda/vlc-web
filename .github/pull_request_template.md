@@ -43,7 +43,7 @@ There are no automated tests by design. Please describe the manual verification 
 
 ## Checklist
 
-- [ ] I read CONTRIBUTING.md.
+- [ ] I read `docs/CONTRIBUTING.md`.
 - [ ] My code matches the existing conventions (plain functions and classes, no `import`/`export`).
 - [ ] If I changed the UI, I used inline `<symbol>` icons with `currentColor` (no JS icon library).
 - [ ] I have not committed any secrets or credentials.

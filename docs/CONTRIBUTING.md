@@ -63,7 +63,12 @@ vlc-web/
 │   ├── vlc512x512.png  # Logo
 │   ├── favicon.ico     # Favicon
 │   └── screenshot.png  # README screenshot
-└── CONTRIBUTING.md   # This file
+├── docs/
+│   ├── CONTRIBUTING.md    # This file
+│   ├── CODE_OF_CONDUCT.md
+│   ├── SECURITY.md
+│   └── AGENTS.md
+└── LICENSE             # MIT — stays at the root so GitHub can detect it
 ```
 
 `app.js` is deliberately heavy. It contains, in order:

@@ -15,7 +15,9 @@ A zero-dependency, no-build vanilla-JS media player in three files:
 | `app.js` | The entire application, loaded as a classic `<script src>` at the end of `<body>` |
 
 `READMEs/` holds five translated READMEs (`ar`, `fr`, `es`, `de`, `zh`). `assets/` holds the logo,
-favicon, and the README screenshot.
+favicon, and the README screenshot. `docs/` holds this file, `CONTRIBUTING.md`,
+`CODE_OF_CONDUCT.md` and `SECURITY.md`; `LICENSE` stays at the root because GitHub only detects a
+license there.
 
 ## Hard constraints — violating these breaks the project
 
@@ -84,7 +86,7 @@ definition is unavailable at runtime).
 - `README.md` is the source of truth; the five files in `READMEs/` mirror it. When behavior changes,
   update **all six**, or the translations will document behavior that no longer exists.
 - Files inside `READMEs/` need the `../` prefix for relative links (`../LICENSE`, `../app.js`,
-  `../CONTRIBUTING.md`, `../CODE_OF_CONDUCT.md`, `../SECURITY.md`, `../assets/...`).
+  `../docs/CONTRIBUTING.md`, `../docs/CODE_OF_CONDUCT.md`, `../docs/SECURITY.md`, `../assets/...`).
 - **The owner rejected a badge row in the READMEs (October 2026)** — do not reintroduce badges or
   shields.io decorations without asking first.
 
